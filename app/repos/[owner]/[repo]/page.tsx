@@ -1,3 +1,4 @@
+import { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,39 @@ interface PageProps {
     owner: string;
     repo: string;
   }>;
+}
+
+export async function generateMetadata(
+  { params }: PageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  try {
+    const resolvedParams = await Promise.resolve(params);
+    const repoDetails = await FetchRepo(
+      resolvedParams.owner,
+      resolvedParams.repo
+    );
+    const previousImages = (await parent).openGraph?.images || [];
+
+    return {
+      title: `${repoDetails.full_name} - GitHub Repo Search App`,
+      description:
+        repoDetails.description || `${repoDetails.full_name} の詳細情報です。`,
+      openGraph: {
+        title: repoDetails.full_name,
+        description:
+          repoDetails.description ||
+          `${repoDetails.full_name} の詳細情報です。`,
+        images: [repoDetails.owner.avatar_url, ...previousImages],
+      },
+    };
+  } catch (error) {
+    // エラーが発生した場合、デフォルトのメタデータを返す
+    return {
+      title: "リポジトリが見つかりません",
+      description: "指定されたリポジトリの情報を取得できませんでした。",
+    };
+  }
 }
 
 function RepoStatCard({
