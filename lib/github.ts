@@ -1,26 +1,12 @@
 "use server";
 
 import { Octokit } from "octokit";
-import { z } from "zod";
-import { Repository, RepositorySearchResult } from "@/lib/types";
+import { GitHubRepo, GitHubSearchRepoResult } from "@/lib/types";
 import { ITEMS_PER_PAGE } from "./config";
-
-// 環境変数のスキーマを定義
-const envSchema = z.object({
-  GITHUB_ACCESS_TOKEN: z.string().min(1, "GITHUB_ACCESS_TOKEN is required"),
-});
-
-// 環境変数をパース（検証）
-const parsedEnv = envSchema.safeParse(process.env);
-
-if (!parsedEnv.success) {
-  throw new Error("Invalid environment variables.");
-}
-
-const GITHUB_ACCESS_TOKEN = parsedEnv.data.GITHUB_ACCESS_TOKEN;
+import { GITHUB_ACCESS_TOKEN } from "./env";
 
 // GitHub API をサーバコンポーネントで呼び出しレポジトリ情報を取得
-async function FetchRepo(owner: string, repo: string): Promise<Repository> {
+async function GetRepo(owner: string, repo: string): Promise<GitHubRepo> {
   const octokit = new Octokit({ auth: GITHUB_ACCESS_TOKEN });
   const res = await octokit.rest.repos.get({ owner: owner, repo: repo });
 
@@ -28,10 +14,10 @@ async function FetchRepo(owner: string, repo: string): Promise<Repository> {
 }
 
 // GitHub API をサーバーコンポーネントで呼び出し検索結果を取得
-async function FetchRepoSearchResult(
+async function SearchRepo(
   query: string,
   page: number
-): Promise<RepositorySearchResult> {
+): Promise<GitHubSearchRepoResult> {
   const octokit = new Octokit({ auth: GITHUB_ACCESS_TOKEN });
   const res = await octokit.rest.search.repos({
     q: query,
@@ -42,4 +28,4 @@ async function FetchRepoSearchResult(
   return res.data;
 }
 
-export { FetchRepo, FetchRepoSearchResult };
+export { GetRepo, SearchRepo };

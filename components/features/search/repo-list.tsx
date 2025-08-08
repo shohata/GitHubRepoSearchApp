@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RepositorySearchResultItems } from "@/lib/types";
+import { GitHubSearchRepoResultItems } from "@/lib/types";
 
 // リポジトリ検索結果のコンポーネント
 export default function RepoList({
   repos,
 }: {
-  repos: RepositorySearchResultItems;
+  repos: GitHubSearchRepoResultItems;
 }) {
   if (repos.length === 0) {
     return (

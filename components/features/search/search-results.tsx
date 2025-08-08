@@ -8,9 +8,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { RepositorySearchResultItems } from "@/lib/types";
+import { GitHubSearchRepoResultItems } from "@/lib/types";
 import RepoList from "@/components/features/search/repo-list";
-import { FetchRepoSearchResult } from "@/lib/github";
+import { SearchRepo } from "@/lib/github";
 import { ITEMS_PER_PAGE } from "@/lib/config";
 
 // 検索結果を表示するコンポーネント
@@ -22,8 +22,8 @@ export default function SearchResults({
   page: string;
 }) {
   const pageNumber = parseInt(page || "1", 10);
-  const [loading, setLoading] = useState(false);
-  const [repos, setRepos] = useState<RepositorySearchResultItems>([]);
+  const [loading, setLoading] = useState(true);
+  const [repos, setRepos] = useState<GitHubSearchRepoResultItems>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +32,7 @@ export default function SearchResults({
       setLoading(true);
       setError(null);
       try {
-        const res = await FetchRepoSearchResult(query, pageNumber);
+        const res = await SearchRepo(query, pageNumber);
         setRepos(res.items);
         setTotalCount(res.total_count);
       } catch (e) {
@@ -43,6 +43,8 @@ export default function SearchResults({
     };
     if (query) {
       search();
+    } else {
+      setLoading(false);
     }
   }, [query, pageNumber]);
 
