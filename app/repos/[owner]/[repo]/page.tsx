@@ -8,43 +8,30 @@ import { FetchRepo } from "@/lib/github";
 
 // ページ型定義
 interface PageProps {
-  params: Promise<{
-    owner: string;
-    repo: string;
-  }>;
+  owner: string;
+  repo: string;
 }
 
+// サイトのメタデータ
 export async function generateMetadata(
-  { params }: PageProps,
+  { params }: { params: Promise<PageProps> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  try {
-    const resolvedParams = await Promise.resolve(params);
-    const repoDetails = await FetchRepo(
-      resolvedParams.owner,
-      resolvedParams.repo
-    );
-    const previousImages = (await parent).openGraph?.images || [];
+  const { owner, repo } = await Promise.resolve(params);
+  const repoDetails = await FetchRepo(owner, repo);
+  const previousImages = (await parent).openGraph?.images || [];
 
-    return {
-      title: `${repoDetails.full_name} - GitHub Repo Search App`,
+  return {
+    title: `${repoDetails.full_name} - GitHub Repo Search App`,
+    description:
+      repoDetails.description || `${repoDetails.full_name} の詳細情報です。`,
+    openGraph: {
+      title: repoDetails.full_name,
       description:
         repoDetails.description || `${repoDetails.full_name} の詳細情報です。`,
-      openGraph: {
-        title: repoDetails.full_name,
-        description:
-          repoDetails.description ||
-          `${repoDetails.full_name} の詳細情報です。`,
-        images: [repoDetails.owner.avatar_url, ...previousImages],
-      },
-    };
-  } catch (error) {
-    // エラーが発生した場合、デフォルトのメタデータを返す
-    return {
-      title: "リポジトリが見つかりません",
-      description: "指定されたリポジトリの情報を取得できませんでした。",
-    };
-  }
+      images: [repoDetails.owner.avatar_url, ...previousImages],
+    },
+  };
 }
 
 function RepoStatCard({
@@ -132,10 +119,13 @@ function RepoDetailsView({ repoDetails }: { repoDetails: Repository }) {
 }
 
 // リポジトリ詳細ページ（ページコンポーネント）
-export default async function RepoDetailsPage({ params }: PageProps) {
-  const resolvedParams = await Promise.resolve(params);
-  const { owner, repo } = resolvedParams;
-  let repoDetails = await FetchRepo(owner, repo);
+export default async function RepoDetailsPage({
+  params,
+}: {
+  params: Promise<PageProps>;
+}) {
+  const { owner, repo } = await Promise.resolve(params);
+  const repoDetails = await FetchRepo(owner, repo);
 
   return (
     <div className="container mx-auto p-4 md:p-8 max-w-7xl">

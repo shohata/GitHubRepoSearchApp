@@ -7,6 +7,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@octokit/plugin-rest-endpoint-methods": "^16.0.0",
     "@radix-ui/react-dialog": "latest",
     "@radix-ui/react-dropdown-menu": "latest",
     "@radix-ui/react-label": "latest",
@@ -23,13 +24,14 @@
     "react": "latest",
     "react-dom": "latest",
     "tailwind-merge": "latest",
-    "tailwindcss": "latest"
+    "tailwindcss": "latest",
+    "zod": "^4.0.15"
   },
   "devDependencies": {
+    "@octokit/types": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "@octokit/types": "latest",
     "tw-animate-css": "latest",
     "typescript": "latest"
   },

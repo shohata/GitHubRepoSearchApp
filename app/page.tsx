@@ -6,11 +6,16 @@ import { Spinner } from "@/components/ui/spinner";
 import SearchForm from "@/components/features/search/search-form";
 import SearchResults from "@/components/features/search/search-results";
 
+interface PageProps {
+  q?: string;
+  page?: string;
+}
+
 // メインの検索ページ
 export default function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; page?: string }>;
+  searchParams: Promise<PageProps>;
 }) {
   const resolvedParams = use(searchParams);
   const query = resolvedParams.q || "";
