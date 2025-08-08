@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Star, Eye, GitFork, AlertCircle } from "lucide-react";
-import { Repository } from "@/lib/types";
+import { GitHubRepo } from "@/lib/types";
 import { FetchRepo } from "@/lib/github";
 
 // ページ型定義
@@ -53,7 +53,7 @@ function RepoStatCard({
 }
 
 // リポジトリ詳細ページ（ビューコンポーネント）
-function RepoDetailsView({ repoDetails }: { repoDetails: Repository }) {
+function RepoDetailsView({ repoDetails }: { repoDetails: GitHubRepo }) {
   return (
     <>
       <Link

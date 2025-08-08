@@ -1,13 +1,16 @@
 {
-  "name": "my-nextjs-typescript-project",
+  "name": "github-repo-search-app",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "dependencies": {
-    "@octokit/plugin-rest-endpoint-methods": "^16.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "latest",
     "@radix-ui/react-dialog": "latest",
     "@radix-ui/react-dropdown-menu": "latest",
     "@radix-ui/react-label": "latest",
@@ -24,20 +27,28 @@
     "react": "latest",
     "react-dom": "latest",
     "tailwind-merge": "latest",
-    "tailwindcss": "latest",
-    "zod": "^4.0.15"
+    "tailwindcss-animate": "latest",
+    "zod": "latest"
   },
   "devDependencies": {
     "@octokit/types": "latest",
+    "@types/jest": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "cypress": "^14.5.4",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "postcss": "latest",
+    "tailwindcss": "latest",
     "tw-animate-css": "latest",
     "typescript": "latest"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@tailwindcss/oxide"
+      "@tailwindcss/oxide",
+      "cypress",
+      "esbuild"
     ]
   }
 }

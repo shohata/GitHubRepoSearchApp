@@ -28,22 +28,13 @@ export default function HomePage({
         <ModeToggle />
       </div>
       <SearchForm query={query} />
-      <Suspense
-        key={query + page}
-        fallback={
-          <div className="flex justify-center mt-8">
-            <Spinner />
-          </div>
-        }
-      >
-        {query ? (
-          <SearchResults query={query} page={page} />
-        ) : (
-          <div className="text-center text-muted-foreground mt-16">
-            <p>リポジトリを検索して、結果をここに表示します。</p>
-          </div>
-        )}
-      </Suspense>
+      {query ? (
+        <SearchResults query={query} page={page} />
+      ) : (
+        <div className="text-center text-muted-foreground mt-16">
+          <p>リポジトリを検索して、結果をここに表示します。</p>
+        </div>
+      )}
     </div>
   );
 }

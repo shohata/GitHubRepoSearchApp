@@ -8,7 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { RepositorySearchResultItems } from "@/lib/types";
+import { GitHubRepoSearchResultItems } from "@/lib/types";
 import RepoList from "@/components/features/search/repo-list";
 import { FetchRepoSearchResult } from "@/lib/github";
 import { ITEMS_PER_PAGE } from "@/lib/config";
@@ -22,8 +22,8 @@ export default function SearchResults({
   page: string;
 }) {
   const pageNumber = parseInt(page || "1", 10);
-  const [loading, setLoading] = useState(false);
-  const [repos, setRepos] = useState<RepositorySearchResultItems>([]);
+  const [loading, setLoading] = useState(true);
+  const [repos, setRepos] = useState<GitHubRepoSearchResultItems>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,6 +43,8 @@ export default function SearchResults({
     };
     if (query) {
       search();
+    } else {
+      setLoading(false);
     }
   }, [query, pageNumber]);
 
