@@ -17,19 +17,20 @@ async function getRepo(owner: string, repo: string): Promise<GitHubRepo> {
     return res.data;
   } catch (error) {
     if (error instanceof RequestError) {
-      // Handle specific API errors
       if (error.status === 403) {
         console.error("GitHub API rate limit exceeded.", error.response);
         throw new Error(
           "APIの利用回数制限に達しました。しばらくしてから再度お試しください。"
         );
       }
-      if (error.status === 422) {
-        console.error("Validation failed.", error.response);
-        throw new Error("検索クエリが無効です。検索条件を確認してください。");
+      if (error.status === 404) {
+        console.error("Repository not found.", error.response);
+        throw new Error("指定されたリポジトリが見つかりませんでした。");
       }
       console.error(`GitHub API Error: ${error.status}`, error.response);
-      throw new Error(`データの取得に失敗しました。(Status: ${error.status})`);
+      throw new Error(
+        `リポジトリ情報の取得に失敗しました。(Status: ${error.status})`
+      );
     }
     // Handle unexpected errors
     console.error("An unexpected error occurred:", error);
@@ -57,14 +58,19 @@ async function searchRepos(
     return res.data;
   } catch (error) {
     if (error instanceof RequestError) {
-      if (error.status === 404) {
-        console.error("Repository not found.", error.response);
-        throw new Error("指定されたリポジトリが見つかりませんでした。");
+      // Handle specific API errors
+      if (error.status === 403) {
+        console.error("GitHub API rate limit exceeded.", error.response);
+        throw new Error(
+          "APIの利用回数制限に達しました。しばらくしてから再度お試しください。"
+        );
+      }
+      if (error.status === 422) {
+        console.error("Validation failed.", error.response);
+        throw new Error("検索クエリが無効です。検索条件を確認してください。");
       }
       console.error(`GitHub API Error: ${error.status}`, error.response);
-      throw new Error(
-        `リポジトリ情報の取得に失敗しました。(Status: ${error.status})`
-      );
+      throw new Error(`データの取得に失敗しました。(Status: ${error.status})`);
     }
     // Handle unexpected errors
     console.error("An unexpected error occurred:", error);

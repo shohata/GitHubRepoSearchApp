@@ -63,26 +63,39 @@ describe("Unit tests for lib/github.ts functions", () => {
       // 関数がエラーをスローすることを確認
       searchRepos("react", 1).catch((err) => {
         expect(err.message).to.equal(
-          "リポジトリ情報の取得に失敗しました。(Status: 403)"
+          "APIの利用回数制限に達しました。しばらくしてから再度お試しください。"
         );
         done(); // 非同期テストの完了を通知
       });
     });
 
     it("should throw an error on a failed request", (done) => {
-      // APIリクエストをインターセプトしてエラーレスポンスを返す
       cy.intercept(
         "GET",
         "https://api.github.com/search/repositories?q=react&page=1*",
-        { statusCode: 404 }
+        { statusCode: 422 }
       ).as("searchReposError");
 
-      // 関数がエラーをスローすることを確認
       searchRepos("react", 1).catch((err) => {
         expect(err.message).to.equal(
-          "指定されたリポジトリが見つかりませんでした。"
+          "検索クエリが無効です。検索条件を確認してください。"
         );
-        done(); // 非同期テストの完了を通知
+        done();
+      });
+    });
+
+    it("should throw an error on a failed request", (done) => {
+      cy.intercept(
+        "GET",
+        "https://api.github.com/search/repositories?q=react&page=1*",
+        { statusCode: 500 }
+      ).as("searchReposError");
+
+      searchRepos("react", 1).catch((err) => {
+        expect(err.message).to.equal(
+          "データの取得に失敗しました。(Status: 500)"
+        );
+        done();
       });
     });
   });
@@ -115,12 +128,12 @@ describe("Unit tests for lib/github.ts functions", () => {
 
     it("should throw an error on a failed request", (done) => {
       cy.intercept("GET", "https://api.github.com/repos/facebook/react", {
-        statusCode: 422,
+        statusCode: 404,
       }).as("getRepoError");
 
       getRepo("facebook", "react").catch((err) => {
         expect(err.message).to.equal(
-          "検索クエリが無効です。検索条件を確認してください。"
+          "指定されたリポジトリが見つかりませんでした。"
         );
         done();
       });
@@ -133,7 +146,7 @@ describe("Unit tests for lib/github.ts functions", () => {
 
       getRepo("facebook", "react").catch((err) => {
         expect(err.message).to.equal(
-          "データの取得に失敗しました。(Status: 500)"
+          "リポジトリ情報の取得に失敗しました。(Status: 500)"
         );
         done();
       });

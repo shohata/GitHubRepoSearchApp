@@ -44,6 +44,17 @@ describe("GitHubリポジトリ検索アプリケーションのE2Eテスト", (
     cy.contains("リポジトリが見つかりませんでした。").should("be.visible");
   });
 
+  it("存在しないリポジトリ詳細ページに移動した場合にエラーメッセージが表示されること", () => {
+    const nonExistentOwner = "this-owner-does-not-exist-1234567890";
+    const nonExistentRepository = "this-repository-does-not-exist-1234567890";
+    cy.visit(`/repos/${nonExistentOwner}/${nonExistentRepository}`);
+
+    // 「指定されたリポジトリが見つかりませんでした。」というメッセージが表示されることを確認
+    cy.contains("指定されたリポジトリが見つかりませんでした。").should(
+      "be.visible"
+    );
+  });
+
   it("ページネーションが正しく動作すること", () => {
     const searchQuery = "react";
 
