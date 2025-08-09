@@ -4,9 +4,9 @@ import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 type GitHubRepo = RestEndpointMethodTypes["repos"]["get"]["response"]["data"];
 
 // GitHub API で検索したレポジトリの一覧
-type GitHubRepoSearchResult =
+type GitHubSearchRepoResult =
   RestEndpointMethodTypes["search"]["repos"]["response"]["data"];
-type GitHubRepoSearchResultItems =
+type GitHubSearchRepoResultItems =
   RestEndpointMethodTypes["search"]["repos"]["response"]["data"]["items"];
 
-export type { GitHubRepo, GitHubRepoSearchResult, GitHubRepoSearchResultItems };
+export type { GitHubRepo, GitHubSearchRepoResult, GitHubSearchRepoResultItems };

@@ -29,6 +29,7 @@ export default function SearchForm({ query }: { query: string }) {
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="リポジトリを検索..."
           className="w-full"
+          required
         />
       </div>
       <Button type="submit">検索</Button>

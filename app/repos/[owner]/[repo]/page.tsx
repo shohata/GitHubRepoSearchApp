@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Star, Eye, GitFork, AlertCircle } from "lucide-react";
 import { GitHubRepo } from "@/lib/types";
-import { FetchRepo } from "@/lib/github";
+import { GetRepo } from "@/lib/github";
 
 // ページ型定義
 interface PageProps {
@@ -18,7 +18,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { owner, repo } = await Promise.resolve(params);
-  const repoDetails = await FetchRepo(owner, repo);
+  const repoDetails = await GetRepo(owner, repo);
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
@@ -125,7 +125,7 @@ export default async function RepoDetailsPage({
   params: Promise<PageProps>;
 }) {
   const { owner, repo } = await Promise.resolve(params);
-  const repoDetails = await FetchRepo(owner, repo);
+  const repoDetails = await GetRepo(owner, repo);
 
   return (
     <div className="container mx-auto p-4 md:p-8 max-w-7xl">
