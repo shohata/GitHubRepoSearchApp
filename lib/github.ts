@@ -1,7 +1,8 @@
 import { Octokit, RequestError } from "octokit";
 import { GitHubRepo, GitHubSearchRepoResult } from "@/lib/types";
 import { ITEMS_PER_PAGE } from "./config";
-import { GITHUB_ACCESS_TOKEN } from "./env";
+
+const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN;
 
 // GitHub API をサーバコンポーネントで呼び出しレポジトリ情報を取得
 async function getRepo(owner: string, repo: string): Promise<GitHubRepo> {
