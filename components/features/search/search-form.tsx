@@ -1,23 +1,20 @@
-import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { use } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SearchParams } from "@/lib/types";
 
 // 検索フォームのコンポーネント
-export default function SearchForm({ query }: { query: string }) {
-  const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState(query);
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      router.push(`/?q=${searchTerm}`);
-    }
-  };
+export default function SearchForm({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { q } = use(searchParams);
+  const query = q || "";
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-4">
+    <form className="flex items-center gap-4">
       <div className="flex-grow">
         <Label htmlFor="search-input" className="sr-only">
           リポジトリを検索
@@ -25,8 +22,8 @@ export default function SearchForm({ query }: { query: string }) {
         <Input
           id="search-input"
           type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          name="q"
+          defaultValue={query}
           placeholder="リポジトリを検索..."
           className="w-full"
           required
