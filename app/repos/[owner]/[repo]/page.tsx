@@ -17,7 +17,7 @@ export async function generateMetadata(
   { params }: { params: Promise<PageProps> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { owner, repo } = await Promise.resolve(params);
+  const { owner, repo } = await params;
   const repoDetails = await GetRepo(owner, repo);
   const previousImages = (await parent).openGraph?.images || [];
 
