@@ -1,4 +1,4 @@
-describe("GitHubリポジトリ検索機能のE2Eテスト", () => {
+describe("GitHubリポジトリ検索アプリケーションのE2Eテスト", () => {
   beforeEach(() => {
     // 各テストの前にトップページにアクセスする
     cy.visit("/");
@@ -42,5 +42,40 @@ describe("GitHubリポジトリ検索機能のE2Eテスト", () => {
 
     // 「リポジトリが見つかりませんでした。」というメッセージが表示されることを確認
     cy.contains("リポジトリが見つかりませんでした。").should("be.visible");
+  });
+
+  it("ページネーションが正しく動作すること", () => {
+    const searchQuery = "react";
+
+    // 検索を実行
+    cy.get("input#search-input").type(searchQuery);
+    cy.get('button[type="submit"]').click();
+    cy.contains("div", "検索結果", { timeout: 10000 }).should("be.visible");
+
+    // ページネーションの "Next" ボタンをクリック
+    cy.get('a[aria-label="Go to next page"]').click();
+    cy.contains("div", "検索結果", { timeout: 10000 }).should("be.visible");
+
+    // URLに "page=2" が含まれていることを確認
+    cy.url().should("include", "page=2");
+
+    // ページネーションの "Next" ボタンをクリック
+    cy.get('a[aria-label="Go to previous page"]').click();
+    cy.contains("div", "検索結果", { timeout: 10000 }).should("be.visible");
+
+    // URLに "page=1" が含まれていることを確認
+    cy.url().should("include", "page=1");
+  });
+
+  it("検索クエリが空の時に検索が実行されないこと", () => {
+    // inputに 'required' attribute があることを確認
+    cy.get("input#search-input").should("have.attr", "required");
+
+    // 検索ボタンをクリック
+    cy.get('button[type="submit"]').click();
+
+    // 検索が実行されていないことを確認
+    cy.url().should("not.include", "q=");
+    cy.get("body").should("not.contain", "件の結果");
   });
 });
