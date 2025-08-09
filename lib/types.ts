@@ -6,8 +6,7 @@ type GitHubRepo = RestEndpointMethodTypes["repos"]["get"]["response"]["data"];
 // GitHub API で検索したレポジトリの一覧
 type GitHubSearchRepoResult =
   RestEndpointMethodTypes["search"]["repos"]["response"]["data"];
-type GitHubSearchRepos =
-  RestEndpointMethodTypes["search"]["repos"]["response"]["data"]["items"];
+type GitHubSearchRepos = GitHubSearchRepoResult["items"];
 
 type SearchParams = {
   q?: string;

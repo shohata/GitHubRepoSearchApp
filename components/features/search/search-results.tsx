@@ -7,7 +7,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import RepoList from "@/components/features/search/repo-list";
-import { SearchRepos } from "@/lib/github";
+import { searchRepos } from "@/lib/github";
 import { ITEMS_PER_PAGE } from "@/lib/config";
 import { GitHubSearchRepos, SearchParams } from "@/lib/types";
 
@@ -29,7 +29,7 @@ export default async function SearchResults({
     );
   }
 
-  const res = await SearchRepos(query, pageNumber);
+  const res = await searchRepos(query, pageNumber);
   const repos: GitHubSearchRepos = res.items;
   const totalCount = res.total_count;
 
