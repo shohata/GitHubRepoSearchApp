@@ -59,3 +59,19 @@ This application uses the GitHub API. Unauthenticated requests have a strict rat
 4.  Restart the development server.
 
 This will significantly relax the API rate limit, allowing you to send more requests. The `.env.local` file is included in `.gitignore`, so it will not be committed to the Git repository.
+
+## Testing
+
+This project uses Cypress for End-to-End (E2E) testing.
+
+1. **Open Cypress in Interactive Mode:** This allows you to see the tests run in a browser, which is useful during development.
+
+   ```bash
+   pnpm cy:open
+   ```
+
+2. **Run Cypress in Headless Mode:** This runs all tests in the command line. It's ideal for CI/CD environments.
+
+   ```bash
+   pnpm cy:run
+   ```
