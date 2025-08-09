@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { ArrowLeft, Star, Eye, GitFork, AlertCircle } from "lucide-react";
-import { GetRepo } from "@/lib/github";
+import { getRepo } from "@/lib/github";
 
 // ページ型定義
 type PageProps = {
@@ -19,7 +19,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { owner, repo } = await params;
-  const repoDetails = await GetRepo(owner, repo);
+  const repoDetails = await getRepo(owner, repo);
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
@@ -57,7 +57,7 @@ function RepoStatCard({
 // リポジトリ詳細コンポーネント
 async function RepoDetailsView({ params }: { params: Promise<PageProps> }) {
   const { owner, repo } = await params;
-  const repoDetails = await GetRepo(owner, repo);
+  const repoDetails = await getRepo(owner, repo);
 
   return (
     <Card>

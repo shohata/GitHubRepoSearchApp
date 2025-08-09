@@ -4,9 +4,14 @@ import { ITEMS_PER_PAGE } from "./config";
 import { GITHUB_ACCESS_TOKEN } from "./env";
 
 // GitHub API をサーバコンポーネントで呼び出しレポジトリ情報を取得
-async function GetRepo(owner: string, repo: string): Promise<GitHubRepo> {
+async function getRepo(owner: string, repo: string): Promise<GitHubRepo> {
   try {
-    const octokit = new Octokit({ auth: GITHUB_ACCESS_TOKEN });
+    let octokit: Octokit;
+    if (!GITHUB_ACCESS_TOKEN) {
+      octokit = new Octokit({ auth: GITHUB_ACCESS_TOKEN });
+    } else {
+      octokit = new Octokit();
+    }
     const res = await octokit.rest.repos.get({ owner: owner, repo: repo });
     return res.data;
   } catch (error) {
@@ -32,12 +37,17 @@ async function GetRepo(owner: string, repo: string): Promise<GitHubRepo> {
 }
 
 // GitHub API をサーバーコンポーネントで呼び出し検索結果を取得
-async function SearchRepos(
+async function searchRepos(
   query: string,
   page: number
 ): Promise<GitHubSearchRepoResult> {
   try {
-    const octokit = new Octokit({ auth: GITHUB_ACCESS_TOKEN });
+    let octokit: Octokit;
+    if (!GITHUB_ACCESS_TOKEN) {
+      octokit = new Octokit({ auth: GITHUB_ACCESS_TOKEN });
+    } else {
+      octokit = new Octokit();
+    }
     const res = await octokit.rest.search.repos({
       q: query,
       page: page,
@@ -61,4 +71,4 @@ async function SearchRepos(
   }
 }
 
-export { GetRepo, SearchRepos };
+export { getRepo, searchRepos };

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GitHubSearchRepos } from "@/lib/types";
+import { GitHubsearchRepos } from "@/lib/types";
 
 // リポジトリ検索結果のコンポーネント
-export default function RepoList({ repos }: { repos: GitHubSearchRepos }) {
+export default function RepoList({ repos }: { repos: GitHubsearchRepos }) {
   if (repos.length === 0) {
     return (
       <div className="text-center text-gray-500 mt-8">
