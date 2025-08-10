@@ -13,9 +13,15 @@ type SearchParams = {
   page?: string;
 };
 
+type RepoParams = {
+  owner: string;
+  repo: string;
+};
+
 export type {
   GitHubRepo,
   GitHubSearchRepoResult,
   GitHubSearchRepos,
   SearchParams,
+  RepoParams,
 };

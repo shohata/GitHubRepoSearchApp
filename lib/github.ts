@@ -7,12 +7,9 @@ const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN;
 // GitHub API をサーバコンポーネントで呼び出しレポジトリ情報を取得
 async function getRepo(owner: string, repo: string): Promise<GitHubRepo> {
   try {
-    let octokit: Octokit;
-    if (!GITHUB_ACCESS_TOKEN) {
-      octokit = new Octokit({ auth: GITHUB_ACCESS_TOKEN });
-    } else {
-      octokit = new Octokit();
-    }
+    const octokit = GITHUB_ACCESS_TOKEN
+      ? new Octokit({ auth: GITHUB_ACCESS_TOKEN })
+      : new Octokit();
     const res = await octokit.rest.repos.get({ owner: owner, repo: repo });
     return res.data;
   } catch (error) {
@@ -44,12 +41,9 @@ async function searchRepos(
   page: number
 ): Promise<GitHubSearchRepoResult> {
   try {
-    let octokit: Octokit;
-    if (!GITHUB_ACCESS_TOKEN) {
-      octokit = new Octokit({ auth: GITHUB_ACCESS_TOKEN });
-    } else {
-      octokit = new Octokit();
-    }
+    const octokit = GITHUB_ACCESS_TOKEN
+      ? new Octokit({ auth: GITHUB_ACCESS_TOKEN })
+      : new Octokit();
     const res = await octokit.rest.search.repos({
       q: query,
       page: page,
