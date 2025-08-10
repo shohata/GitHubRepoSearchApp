@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import ModeToggle from "@/components/mode-toggle";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="container mx-auto p-4 md:p-8 max-w-7xl">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-3xl font-bold">GitHub リポジトリ検索</h1>
+              <ModeToggle />
+            </div>
+            <main>{children}</main>
+          </div>
         </ThemeProvider>
       </body>
     </html>

@@ -10,25 +10,26 @@
     "cy:run": "cypress run"
   },
   "dependencies": {
-    "@octokit/plugin-rest-endpoint-methods": "latest",
-    "@radix-ui/react-dialog": "latest",
-    "@radix-ui/react-dropdown-menu": "latest",
-    "@radix-ui/react-label": "latest",
-    "@radix-ui/react-select": "latest",
-    "@radix-ui/react-slot": "latest",
-    "@tailwindcss/postcss": "latest",
-    "class-variance-authority": "latest",
-    "clsx": "latest",
-    "lucide-react": "latest",
-    "next": "latest",
-    "next-themes": "latest",
-    "octokit": "latest",
-    "postcss": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "tailwind-merge": "latest",
-    "tailwindcss-animate": "latest",
-    "zod": "latest"
+    "@octokit/plugin-rest-endpoint-methods": "^16.0.0",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-dropdown-menu": "^2.1.15",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-select": "^2.2.5",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tailwindcss/postcss": "^4.1.11",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.539.0",
+    "next": "^15.4.6",
+    "next-themes": "^0.4.6",
+    "octokit": "^5.0.3",
+    "postcss": "^8.5.6",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-query": "^3.39.3",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@octokit/types": "latest",
@@ -39,7 +40,6 @@
     "cypress": "^14.5.4",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "postcss": "latest",
     "tailwindcss": "latest",
     "tw-animate-css": "latest",
     "typescript": "latest"
@@ -48,7 +48,9 @@
     "onlyBuiltDependencies": [
       "@tailwindcss/oxide",
       "cypress",
-      "esbuild"
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
     ]
   }
 }

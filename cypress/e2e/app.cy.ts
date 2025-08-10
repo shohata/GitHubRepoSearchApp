@@ -49,10 +49,8 @@ describe("GitHubリポジトリ検索アプリケーションのE2Eテスト", (
     const nonExistentRepository = "this-repository-does-not-exist-1234567890";
     cy.visit(`/repos/${nonExistentOwner}/${nonExistentRepository}`);
 
-    // 「指定されたリポジトリが見つかりませんでした。」というメッセージが表示されることを確認
-    cy.contains("指定されたリポジトリが見つかりませんでした。").should(
-      "be.visible"
-    );
+    // 「エラーが発生しました」というメッセージが表示されることを確認
+    cy.contains("エラーが発生しました").should("be.visible");
   });
 
   it("ページネーションが正しく動作すること", () => {

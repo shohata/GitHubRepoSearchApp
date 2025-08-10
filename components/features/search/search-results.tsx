@@ -1,27 +1,37 @@
+"use client";
+
+import { RepoList } from "./repo-list";
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import RepoList from "@/components/features/search/repo-list";
-import { searchRepos } from "@/lib/github";
-import { ITEMS_PER_PAGE } from "@/lib/config";
-import { GitHubSearchRepos, SearchParams } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { useSearchResults } from "./use-search-results";
 
-// 検索結果を表示するコンポーネント
-export default async function SearchResults({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { q, page } = await searchParams;
-  const query = q || "";
-  const pageNumber = parseInt(page || "1", 10);
+/**
+ * 検索結果を表示するコンポーネント
+ */
+export function SearchResults() {
+  // 検索ロジックをカスタムフックから取得
+  const {
+    query,
+    page,
+    isLoading,
+    isError,
+    repos,
+    total_count,
+    totalPage,
+    pagination,
+  } = useSearchResults();
 
-  if (query.length == 0) {
+  // 検索クエリがない場合
+  if (!query) {
     return (
       <div className="text-center text-muted-foreground mt-16">
         <p>リポジトリを検索して、結果をここに表示します。</p>
@@ -29,58 +39,75 @@ export default async function SearchResults({
     );
   }
 
-  const res = await searchRepos(query, pageNumber);
-  const repos: GitHubSearchRepos = res.items;
-  const totalCount = res.total_count;
-
-  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-  const maxPageLinks = 5;
-  let startPage = Math.max(1, pageNumber - Math.floor(maxPageLinks / 2));
-  let endPage = Math.min(totalPages, startPage + maxPageLinks - 1);
-
-  if (endPage - startPage < maxPageLinks - 1) {
-    startPage = Math.max(1, endPage - maxPageLinks + 1);
+  // データ取得中の表示
+  if (isLoading) {
+    return (
+      <div className="flex justify-center mt-8">
+        <Spinner />
+      </div>
+    );
   }
 
-  const paginationNumbers = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, i) => startPage + i
-  );
+  // 検索結果がない場合
+  if (repos.length === 0) {
+    return (
+      <div className="text-center text-gray-500 mt-8">
+        リポジトリが見つかりませんでした。
+      </div>
+    );
+  }
 
+  // エラー発生時の表示
+  if (isError) {
+    return (
+      <div className="text-center text-red-500">
+        <p>リポジトリの取得に失敗しました。</p>
+        <Button variant="outline" onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
+  // 検索結果の表示
   return (
     <div>
-      <div className="text-gray-600 mt-4">
-        検索結果: {totalCount.toLocaleString()}件
-      </div>
+      <p className="mb-4 text-sm text-muted-foreground">
+        検索結果: {total_count}件
+      </p>
+
       <RepoList repos={repos} />
-      {totalCount > ITEMS_PER_PAGE && (
-        <Pagination className="mt-8">
-          <PaginationContent>
-            {pageNumber > 1 && (
-              <PaginationItem>
-                <PaginationPrevious
-                  href={`/?q=${query}&page=${pageNumber - 1}`}
-                />
-              </PaginationItem>
-            )}
-            {paginationNumbers.map((p) => (
-              <PaginationItem key={p}>
+
+      <Pagination className="mt-4">
+        <PaginationContent>
+          {/* 前のページへのリンク */}
+          {page > 1 && (
+            <PaginationPrevious href={`/?q=${query}&page=${page - 1}`} />
+          )}
+
+          {/* ページ番号 */}
+          {pagination.map((item, index) => {
+            if (item.type === "ellipsis") {
+              return <PaginationEllipsis key={`ellipsis-${index}`} />;
+            }
+            return (
+              <PaginationItem key={item.pageNumber}>
                 <PaginationLink
-                  href={`/?q=${query}&page=${p}`}
-                  isActive={p === pageNumber}
+                  href={`/?q=${query}&page=${item.pageNumber}`}
+                  isActive={item.isActive}
                 >
-                  {p}
+                  {item.pageNumber}
                 </PaginationLink>
               </PaginationItem>
-            ))}
-            {pageNumber < totalPages && (
-              <PaginationItem>
-                <PaginationNext href={`/?q=${query}&page=${pageNumber + 1}`} />
-              </PaginationItem>
-            )}
-          </PaginationContent>
-        </Pagination>
-      )}
+            );
+          })}
+
+          {/* 次のページへのリンク */}
+          {page < totalPage && (
+            <PaginationNext href={`/?q=${query}&page=${page + 1}`} />
+          )}
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }

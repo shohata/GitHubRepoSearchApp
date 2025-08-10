@@ -4,15 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GitHubSearchRepos } from "@/lib/types";
 
 // リポジトリ検索結果のコンポーネント
-export default function RepoList({ repos }: { repos: GitHubSearchRepos }) {
-  if (repos.length === 0) {
-    return (
-      <div className="text-center text-gray-500 mt-8">
-        リポジトリが見つかりませんでした。
-      </div>
-    );
-  }
-
+export function RepoList({ repos }: { repos: GitHubSearchRepos }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
       {repos.map((repo) => (

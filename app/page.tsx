@@ -1,28 +1,24 @@
-import React, { lazy, Suspense } from "react";
-import ModeToggle from "@/components/mode-toggle";
-import { Spinner } from "@/components/ui/spinner";
-import SearchForm from "@/components/features/search/search-form";
-import SearchResults from "@/components/features/search/search-results";
-import { SearchParams } from "@/lib/types";
+"use client";
 
-// メインの検索ページ
-export default function HomePage({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
+import { QueryClient, QueryClientProvider } from "react-query";
+import { SearchForm } from "@/components/features/search/search-form";
+import { SearchResults } from "@/components/features/search/search-results";
+
+/**
+ * アプリケーションのメインページ
+ * 検索フォームと検索結果を表示します。
+ */
+export default function Page() {
+  const queryClient = new QueryClient();
   return (
-    <div className="container mx-auto p-4 md:p-8 max-w-7xl">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">GitHub Repository Search App</h1>
-        <ModeToggle />
+    <QueryClientProvider client={queryClient}>
+      <div>
+        {/* 検索フォーム */}
+        <SearchForm />
+
+        {/* 検索結果 */}
+        <SearchResults />
       </div>
-      <Suspense fallback={<Spinner />}>
-        <SearchForm searchParams={searchParams} />
-      </Suspense>
-      <Suspense fallback={<Spinner className="mt-8" />}>
-        <SearchResults searchParams={searchParams} />
-      </Suspense>
-    </div>
+    </QueryClientProvider>
   );
 }

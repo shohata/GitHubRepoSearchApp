@@ -1,35 +1,32 @@
-import { use } from "react";
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SearchParams } from "@/lib/types";
+import { useSearchForm } from "./use-search-form";
 
-// 検索フォームのコンポーネント
-export default function SearchForm({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { q } = use(searchParams);
-  const query = q || "";
+// 検索フォームのUIコンポーネント
+export function SearchForm() {
+  const { initialQuery, handleSubmit } = useSearchForm();
 
   return (
-    <form className="flex items-center gap-4">
+    <form onSubmit={handleSubmit} className="flex items-center gap-4">
       <div className="flex-grow">
         <Label htmlFor="search-input" className="sr-only">
           リポジトリを検索
         </Label>
         <Input
           id="search-input"
+          className="w-full"
           type="text"
           name="q"
-          defaultValue={query}
+          defaultValue={initialQuery}
+          key={initialQuery}
           placeholder="リポジトリを検索..."
-          className="w-full"
           required
         />
       </div>
-      <Button type="submit">検索</Button>
+      <Button type="submit">Search</Button>
     </form>
   );
 }
