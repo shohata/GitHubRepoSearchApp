@@ -26,12 +26,9 @@ export async function GET(request: Request) {
   } catch (error) {
     // エラーハンドリング
     console.error("GitHub API request failed:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred";
     return NextResponse.json(
       {
-        error: "GitHubリポジトリの検索に失敗しました。",
-        details: errorMessage,
+        error: "リポジトリの検索中にサーバーでエラーが発生しました。",
       },
       { status: 500 }
     );
