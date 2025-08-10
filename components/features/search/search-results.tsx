@@ -14,21 +14,24 @@ import { Spinner } from "@/components/ui/spinner";
 import { ErrorDisplay } from "@/components/ui/error-display";
 import { useSearchResults } from "./use-search-results";
 
-/**
- * 検索結果を表示するコンポーネント
- */
+// 検索結果を表示するコンポーネント
 export function SearchResults() {
   // 検索ロジックをカスタムフックから取得
   const {
     query,
     page,
+    error,
     isLoading,
-    isError,
     repos,
-    total_count,
+    totalCount,
     totalPage,
     pagination,
   } = useSearchResults();
+
+  // エラー発生時の表示
+  if (error) {
+    return <ErrorDisplay message={"リポジトリの検索に失敗しました。"} />;
+  }
 
   // 検索クエリがない場合
   if (!query) {
@@ -57,17 +60,18 @@ export function SearchResults() {
     );
   }
 
-  // エラー発生時の表示
-  if (isError) {
-    return <ErrorDisplay message="リポジトリの取得に失敗しました。" />;
-  }
-
   // 検索結果の表示
   return (
     <div>
-      <p className="mb-4 text-sm text-muted-foreground">
-        検索結果: {total_count}件
+      <p className="text-sm text-muted-foreground mt-4 mb-4">
+        検索結果: {totalCount}件
       </p>
+
+      {totalCount > 1000 && (
+        <p className="text-sm text-muted-foreground mt-4 mb-4">
+          検索結果が多数あります。APIの仕様により、最初の1000件のみ表示しています。
+        </p>
+      )}
 
       <RepoList repos={repos} />
 

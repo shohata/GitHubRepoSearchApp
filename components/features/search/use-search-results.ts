@@ -1,35 +1,47 @@
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { useQuery } from "react-query";
-import { searchRepos } from "@/lib/github";
+import useSWR from "swr";
 import { ITEMS_PER_PAGE } from "@/lib/config";
+import { GitHubSearchRepoResult } from "@/lib/types";
 
 // ページネーションアイテムの型定義
 export type PaginationItem =
   | { type: "page"; pageNumber: number; isActive?: boolean }
   | { type: "ellipsis" };
 
+// JSONを返すシンプルなfetcher関数
+const fetcher = (url: string) =>
+  fetch(url).then((res) => {
+    if (!res.ok) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+    return res.json();
+  });
+
 // 検索結果とページネーションのロジックを扱うカスタムフック
-export const useSearchResults = () => {
+export function useSearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") ?? "";
   const page = Number(searchParams.get("page") ?? 1);
 
-  // useQueryを使用してデータ取得
-  const { data, isLoading, isError, isFetching } = useQuery({
-    queryKey: ["repos", query, page],
-    queryFn: () => searchRepos(query, page),
-    enabled: !!query, // qが存在する場合のみクエリを有効化
-  });
+  // useSWRを使用してデータ取得
+  const apiUrl = query ? `/api/search?q=${query}&page=${page}` : null;
+  const { data, error, isLoading } = useSWR<GitHubSearchRepoResult>(
+    apiUrl,
+    fetcher
+  );
 
   // 取得したデータから必要な値を抽出
   const repos = data?.items ?? [];
-  const total_count = data?.total_count ?? 0;
+  const totalCount = data?.total_count ?? 0;
+
+  // 最初の1000件だけ取得可能なため制限
+  const totalItems = useMemo(() => Math.min(totalCount, 1000), [totalCount]);
 
   // 総ページ数を計算
   const totalPage = useMemo(
-    () => Math.ceil(total_count / ITEMS_PER_PAGE),
-    [total_count]
+    () => Math.ceil(totalItems / ITEMS_PER_PAGE),
+    [totalItems]
   );
 
   // ページネーションの表示ロジック
@@ -71,12 +83,11 @@ export const useSearchResults = () => {
   return {
     query,
     page,
+    error,
     isLoading,
-    isError,
-    isFetching,
     repos,
-    total_count,
+    totalCount,
     totalPage,
     pagination,
   };
-};
+}
