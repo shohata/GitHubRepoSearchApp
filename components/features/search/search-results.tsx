@@ -10,8 +10,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { ErrorDisplay } from "@/components/ui/error-display";
 import { useSearchResults } from "./use-search-results";
 
 /**
@@ -59,14 +59,7 @@ export function SearchResults() {
 
   // エラー発生時の表示
   if (isError) {
-    return (
-      <div className="text-center text-red-500">
-        <p>リポジトリの取得に失敗しました。</p>
-        <Button variant="outline" onClick={() => window.location.reload()}>
-          Retry
-        </Button>
-      </div>
-    );
+    return <ErrorDisplay message="リポジトリの取得に失敗しました。" />;
   }
 
   // 検索結果の表示
