@@ -14,9 +14,9 @@ export async function mockSearchAPI(page: Page) {
   await page.route("**/api/search**", async (route) => {
     const url = new URL(route.request().url());
     const query = url.searchParams.get("q") || "";
-    const page = Number.parseInt(url.searchParams.get("page") || "1", 10);
+    const pageNum = Number.parseInt(url.searchParams.get("page") || "1", 10);
 
-    const mockResponse = generateMockSearchResponse(query, page);
+    const mockResponse = generateMockSearchResponse(query, pageNum);
 
     await route.fulfill({
       status: 200,

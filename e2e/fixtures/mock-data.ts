@@ -215,9 +215,17 @@ export function generateMockSearchResponse(
 
   const lowerQuery = query.toLowerCase();
 
-  if (lowerQuery.includes("react")) {
-    repositories = mockRepositories;
-    totalCount = 50; // 複数ページをシミュレート
+  if (lowerQuery.includes("react") && !lowerQuery.includes("native")) {
+    // reactクエリの場合、複数ページ分のデータを生成
+    const baseRepos = mockRepositories;
+    const additionalRepos = Array.from({ length: 25 }, (_, i) => ({
+      ...baseRepos[i % baseRepos.length],
+      id: 1000 + i,
+      name: `react-${i + 1}`,
+      full_name: `facebook/react-${i + 1}`,
+    }));
+    repositories = [...baseRepos, ...additionalRepos];
+    totalCount = repositories.length;
   } else if (lowerQuery.includes("typescript")) {
     repositories = mockTypeScriptRepositories;
     totalCount = mockTypeScriptRepositories.length;
@@ -230,6 +238,7 @@ export function generateMockSearchResponse(
   } else if (
     lowerQuery.includes("nonexistent") ||
     lowerQuery.includes("xyzzyx") ||
+    lowerQuery.includes("does-not-exist") ||
     lowerQuery.length > 50
   ) {
     // 存在しないリポジトリや非常に長いクエリ

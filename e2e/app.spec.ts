@@ -19,7 +19,7 @@ async function searchAndWaitForResults(page: Page, query: string) {
 
 test.describe("GitHubリポジトリ検索アプリケーションのE2Eテスト", () => {
   test.beforeEach(async ({ page }) => {
-    // APIをモック化（テストの安定性を向上）
+    // 各テストの前にAPIをモック化
     await mockAllAPIs(page);
 
     // 各テストの前にトップページにアクセスする
