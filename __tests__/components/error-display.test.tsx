@@ -2,19 +2,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ErrorDisplay } from "@/components/ui/error-display";
 
-// Next.jsのLinkをモック
-jest.mock("next/link", () => ({
-  __esModule: true,
-  default: ({
-    children,
-    href,
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => {
-    return <a href={href}>{children}</a>;
-  },
-}));
+// Next.jsのLinkをモック（自動的に __mocks__/next/link.tsx が使用される）
+jest.mock("next/link");
 
 describe("ErrorDisplay", () => {
   const mockReload = jest.fn();

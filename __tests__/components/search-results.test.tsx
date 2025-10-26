@@ -4,36 +4,17 @@ import { useSearchResults } from "@/components/features/search/use-search-result
 
 // Import shared mock data
 import { mockMultipleRepos } from "@/__tests__/__mocks__/github-data";
+import {
+  createSearchResultsMock,
+  searchResultsPresets,
+} from "@/__tests__/__mocks__/search-results-mocks";
 
 // useSearchResultsフックをモック
 jest.mock("@/components/features/search/use-search-results");
 
-// Next.jsのImageとLinkをモック
-jest.mock("next/image", () => ({
-  __esModule: true,
-  default: (props: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-    className: string;
-  }) => {
-    return <img {...props} />;
-  },
-}));
-
-jest.mock("next/link", () => ({
-  __esModule: true,
-  default: ({
-    children,
-    href,
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => {
-    return <a href={href}>{children}</a>;
-  },
-}));
+// Next.jsのImageとLinkをモック（自動的に __mocks__/next/ が使用される）
+jest.mock("next/image");
+jest.mock("next/link");
 
 describe("SearchResults", () => {
   beforeEach(() => {
@@ -41,16 +22,9 @@ describe("SearchResults", () => {
   });
 
   test("クエリがない場合、初期メッセージが表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "",
-      page: 1,
-      error: null,
-      isLoading: false,
-      repos: [],
-      totalCount: 0,
-      totalPage: 0,
-      pagination: [],
-    });
+    (useSearchResults as jest.Mock).mockReturnValue(
+      searchResultsPresets.initial
+    );
 
     render(<SearchResults />);
 
@@ -60,16 +34,9 @@ describe("SearchResults", () => {
   });
 
   test("検索結果がない場合、適切なメッセージが表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "nonexistent-repo-xyz",
-      page: 1,
-      error: null,
-      isLoading: false,
-      repos: [],
-      totalCount: 0,
-      totalPage: 0,
-      pagination: [],
-    });
+    (useSearchResults as jest.Mock).mockReturnValue(
+      searchResultsPresets.noResults
+    );
 
     render(<SearchResults />);
 
@@ -79,16 +46,9 @@ describe("SearchResults", () => {
   });
 
   test("検索結果が1000件を超える場合、警告メッセージが表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "react",
-      page: 1,
-      error: null,
-      isLoading: false,
-      repos: mockMultipleRepos,
-      totalCount: 1500,
-      totalPage: 50,
-      pagination: [{ type: "page", pageNumber: 1, isActive: true }],
-    });
+    (useSearchResults as jest.Mock).mockReturnValue(
+      searchResultsPresets.overLimit(mockMultipleRepos)
+    );
 
     render(<SearchResults />);
 
@@ -100,21 +60,9 @@ describe("SearchResults", () => {
   });
 
   test("ページネーションが正しく表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "react",
-      page: 2,
-      error: null,
-      isLoading: false,
-      repos: mockMultipleRepos,
-      totalCount: 100,
-      totalPage: 4,
-      pagination: [
-        { type: "page", pageNumber: 1, isActive: false },
-        { type: "page", pageNumber: 2, isActive: true },
-        { type: "page", pageNumber: 3, isActive: false },
-        { type: "page", pageNumber: 4, isActive: false },
-      ],
-    });
+    (useSearchResults as jest.Mock).mockReturnValue(
+      searchResultsPresets.withPagination(2, 4, mockMultipleRepos)
+    );
 
     render(<SearchResults />);
 
@@ -130,19 +78,9 @@ describe("SearchResults", () => {
   });
 
   test("最初のページでは前へリンクが表示されない", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "react",
-      page: 1,
-      error: null,
-      isLoading: false,
-      repos: mockMultipleRepos,
-      totalCount: 100,
-      totalPage: 4,
-      pagination: [
-        { type: "page", pageNumber: 1, isActive: true },
-        { type: "page", pageNumber: 2, isActive: false },
-      ],
-    });
+    (useSearchResults as jest.Mock).mockReturnValue(
+      searchResultsPresets.withPagination(1, 4, mockMultipleRepos)
+    );
 
     render(<SearchResults />);
 
@@ -152,19 +90,9 @@ describe("SearchResults", () => {
   });
 
   test("最後のページでは次へリンクが表示されない", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "react",
-      page: 4,
-      error: null,
-      isLoading: false,
-      repos: mockMultipleRepos,
-      totalCount: 100,
-      totalPage: 4,
-      pagination: [
-        { type: "page", pageNumber: 3, isActive: false },
-        { type: "page", pageNumber: 4, isActive: true },
-      ],
-    });
+    (useSearchResults as jest.Mock).mockReturnValue(
+      searchResultsPresets.withPagination(4, 4, mockMultipleRepos)
+    );
 
     render(<SearchResults />);
 
@@ -174,24 +102,24 @@ describe("SearchResults", () => {
   });
 
   test("省略記号が正しく表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "react",
-      page: 5,
-      error: null,
-      isLoading: false,
-      repos: mockMultipleRepos,
-      totalCount: 300,
-      totalPage: 10,
-      pagination: [
-        { type: "page", pageNumber: 1, isActive: false },
-        { type: "ellipsis", id: "start" },
-        { type: "page", pageNumber: 4, isActive: false },
-        { type: "page", pageNumber: 5, isActive: true },
-        { type: "page", pageNumber: 6, isActive: false },
-        { type: "ellipsis", id: "end" },
-        { type: "page", pageNumber: 10, isActive: false },
-      ],
-    });
+    (useSearchResults as jest.Mock).mockReturnValue(
+      createSearchResultsMock({
+        query: "react",
+        page: 5,
+        repos: mockMultipleRepos,
+        totalCount: 300,
+        totalPage: 10,
+        pagination: [
+          { type: "page", pageNumber: 1, isActive: false },
+          { type: "ellipsis", id: "start" },
+          { type: "page", pageNumber: 4, isActive: false },
+          { type: "page", pageNumber: 5, isActive: true },
+          { type: "page", pageNumber: 6, isActive: false },
+          { type: "ellipsis", id: "end" },
+          { type: "page", pageNumber: 10, isActive: false },
+        ],
+      })
+    );
 
     render(<SearchResults />);
 
@@ -201,16 +129,15 @@ describe("SearchResults", () => {
   });
 
   test("複数のリポジトリが正しく表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "javascript",
-      page: 1,
-      error: null,
-      isLoading: false,
-      repos: mockMultipleRepos,
-      totalCount: 2,
-      totalPage: 1,
-      pagination: [{ type: "page", pageNumber: 1, isActive: true }],
-    });
+    (useSearchResults as jest.Mock).mockReturnValue(
+      createSearchResultsMock({
+        query: "javascript",
+        repos: mockMultipleRepos,
+        totalCount: 2,
+        totalPage: 1,
+        pagination: [{ type: "page", pageNumber: 1, isActive: true }],
+      })
+    );
 
     render(<SearchResults />);
 

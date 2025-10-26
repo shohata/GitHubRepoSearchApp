@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { useSearchParams } from "next/navigation";
 import { useSearchResults } from "@/components/features/search/use-search-results";
+import { mockSimpleSearchResponse } from "@/__tests__/__mocks__/github-data";
 
 // Next.jsのnavigationモジュールをモック
 jest.mock("next/navigation", () => ({
@@ -83,23 +84,15 @@ describe("useSearchResults", () => {
       return null;
     });
 
-    const mockData = {
-      items: [
-        { id: 1, name: "repo1", owner: { login: "user1" } },
-        { id: 2, name: "repo2", owner: { login: "user2" } },
-      ],
-      total_count: 100,
-    };
-
     (useSWR as jest.Mock).mockReturnValue({
-      data: mockData,
+      data: mockSimpleSearchResponse,
       error: undefined,
       isLoading: false,
     });
 
     const { result } = renderHook(() => useSearchResults());
 
-    expect(result.current.repos).toEqual(mockData.items);
+    expect(result.current.repos).toEqual(mockSimpleSearchResponse.items);
     expect(result.current.totalCount).toBe(100);
     expect(result.current.query).toBe("typescript");
     expect(result.current.page).toBe(2);

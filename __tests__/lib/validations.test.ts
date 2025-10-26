@@ -4,6 +4,7 @@ import {
   repoParamsSchema,
   searchParamsSchema,
 } from "@/lib/validations";
+import { sanitizationTestCases } from "@/__tests__/__mocks__/validation-test-data";
 
 describe("lib/validations.ts", () => {
   describe("searchParamsSchema", () => {
@@ -37,31 +38,31 @@ describe("lib/validations.ts", () => {
 
     it("クエリの前後の空白をトリムする", () => {
       const result = searchParamsSchema.parse({
-        q: "  react  ",
+        q: sanitizationTestCases.trim.input,
         page: "1",
       });
 
-      expect(result.q).toBe("react");
+      expect(result.q).toBe(sanitizationTestCases.trim.expected);
     });
 
     it("クエリから < と > を除去する（XSS対策）", () => {
       const result = searchParamsSchema.parse({
-        q: "<script>alert('xss')</script>",
+        q: sanitizationTestCases.xss.input,
         page: "1",
       });
 
-      expect(result.q).toBe("scriptalert('xss')/script");
+      expect(result.q).toBe(sanitizationTestCases.xss.expected);
       expect(result.q).not.toContain("<");
       expect(result.q).not.toContain(">");
     });
 
     it("複合的なサニタイゼーション（トリム + < > 除去）を実行する", () => {
       const result = searchParamsSchema.parse({
-        q: "  <div>test</div>  ",
+        q: sanitizationTestCases.combined.input,
         page: "1",
       });
 
-      expect(result.q).toBe("divtest/div");
+      expect(result.q).toBe(sanitizationTestCases.combined.expected);
     });
 
     it("空のクエリでエラーをスローする", () => {

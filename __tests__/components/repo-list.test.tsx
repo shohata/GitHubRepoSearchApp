@@ -3,34 +3,14 @@ import { RepoList } from "@/components/features/search/repo-list";
 import type { GitHubSearchRepos } from "@/lib/types";
 
 // Import shared mock data
-import { mockMultipleRepos } from "@/__tests__/__mocks__/github-data";
+import {
+  mockMultipleRepos,
+  mockRepoWithoutLanguage,
+} from "@/__tests__/__mocks__/github-data";
 
-// Next.jsのImageとLinkをモック
-jest.mock("next/image", () => ({
-  __esModule: true,
-  default: (props: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-    className: string;
-  }) => {
-    return <img {...props} />;
-  },
-}));
-
-jest.mock("next/link", () => ({
-  __esModule: true,
-  default: ({
-    children,
-    href,
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => {
-    return <a href={href}>{children}</a>;
-  },
-}));
+// Next.jsのImageとLinkをモック（自動的に __mocks__/next/ が使用される）
+jest.mock("next/image");
+jest.mock("next/link");
 
 describe("RepoList", () => {
   test("リポジトリのリストが正しく表示される", () => {
@@ -81,12 +61,7 @@ describe("RepoList", () => {
   });
 
   test("言語が設定されていない場合、N/Aが表示される", () => {
-    const reposWithoutLanguage: GitHubSearchRepos = [
-      {
-        ...mockMultipleRepos[0],
-        language: null,
-      },
-    ];
+    const reposWithoutLanguage: GitHubSearchRepos = [mockRepoWithoutLanguage];
 
     render(<RepoList repos={reposWithoutLanguage} />);
 

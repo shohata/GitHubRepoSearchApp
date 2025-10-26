@@ -92,3 +92,80 @@ export const mockSearchResult = {
  * GitHub Repos API のレスポンス形式（リポジトリ詳細）
  */
 export const mockRepoDetails = mockReactRepo;
+
+/**
+ * 個別のリポジトリをエクスポート（テストで個別に使用する場合）
+ */
+export const mockReactRepo_exported = mockReactRepo;
+export const mockVueRepo_exported = mockVueRepo;
+
+/**
+ * useSearchResults テスト用の簡易APIレスポンスモック
+ * 使用例: __tests__/components/use-search-results.test.ts
+ */
+export const mockSimpleSearchResponse = {
+  items: [
+    {
+      id: 1,
+      name: "repo1",
+      full_name: "user1/repo1",
+      owner: {
+        login: "user1",
+        avatar_url: "https://example.com/user1.png",
+      },
+      description: "Test repository 1",
+      stargazers_count: 100,
+      language: "JavaScript",
+      forks_count: 10,
+      open_issues_count: 5,
+      watchers_count: 50,
+      html_url: "https://github.com/user1/repo1",
+      subscribers_count: 50,
+      created_at: "2020-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z",
+    },
+    {
+      id: 2,
+      name: "repo2",
+      full_name: "user2/repo2",
+      owner: {
+        login: "user2",
+        avatar_url: "https://example.com/user2.png",
+      },
+      description: "Test repository 2",
+      stargazers_count: 200,
+      language: "TypeScript",
+      forks_count: 20,
+      open_issues_count: 10,
+      watchers_count: 100,
+      html_url: "https://github.com/user2/repo2",
+      subscribers_count: 100,
+      created_at: "2020-06-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z",
+    },
+  ],
+  total_count: 100,
+  incomplete_results: false,
+};
+
+/**
+ * 言語が設定されていないリポジトリのモック（検索結果用）
+ */
+export const mockRepoWithoutLanguage = {
+  ...mockReactRepo,
+  language: null,
+  score: 1.0,
+};
+
+/**
+ * APIレスポンスのファクトリー関数
+ * 総件数を指定してカスタマイズ可能
+ */
+export const createMockSearchResponse = (
+  totalCount: number,
+  items: GitHubSearchRepos = mockMultipleRepos
+) => ({
+  items,
+  total_count: totalCount,
+  incomplete_results: false,
+});
