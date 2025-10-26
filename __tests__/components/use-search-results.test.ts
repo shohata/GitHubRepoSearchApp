@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import { useSearchParams } from "next/navigation";
 import { useSearchResults } from "@/components/features/search/use-search-results";
 
@@ -192,6 +192,10 @@ describe("useSearchResults", () => {
 
     renderHook(() => useSearchResults());
 
-    expect(useSWR).toHaveBeenCalledWith(null, expect.any(Function), expect.any(Object));
+    expect(useSWR).toHaveBeenCalledWith(
+      null,
+      expect.any(Function),
+      expect.any(Object)
+    );
   });
 });

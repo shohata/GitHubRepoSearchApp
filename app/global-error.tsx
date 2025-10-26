@@ -19,7 +19,9 @@ export default function GlobalError({
         <div className="container mx-auto p-4 md:p-8 max-w-7xl min-h-screen flex items-center justify-center">
           <ErrorDisplay
             title="予期せぬエラーが発生しました"
-            message={error.message || "アプリケーションでエラーが発生しました。"}
+            message={
+              error.message || "アプリケーションでエラーが発生しました。"
+            }
             reload={reset}
           />
         </div>

@@ -70,9 +70,7 @@ describe("lib/pagination.ts", () => {
 
     it("総ページ数が1の場合", () => {
       const result = generatePagination(1, 1, 5);
-      expect(result).toEqual([
-        { type: "page", pageNumber: 1, isActive: true },
-      ]);
+      expect(result).toEqual([{ type: "page", pageNumber: 1, isActive: true }]);
     });
 
     it("最大表示数を3に設定した場合", () => {

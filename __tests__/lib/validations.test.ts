@@ -1,9 +1,9 @@
-import {
-  searchParamsSchema,
-  repoParamsSchema,
-  apiSearchRequestSchema,
-} from "@/lib/validations";
 import { ZodError } from "zod";
+import {
+  apiSearchRequestSchema,
+  repoParamsSchema,
+  searchParamsSchema,
+} from "@/lib/validations";
 
 describe("lib/validations.ts", () => {
   describe("searchParamsSchema", () => {

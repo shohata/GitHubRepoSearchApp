@@ -53,7 +53,7 @@ export function handleGitHubError(
     switch (error.status) {
       case 403: {
         // レート制限情報を取得
-        const remaining = error.response?.headers?.["x-ratelimit-remaining"];
+        const _remaining = error.response?.headers?.["x-ratelimit-remaining"];
         const resetTime = error.response?.headers?.["x-ratelimit-reset"];
         let message: string = ERROR_MESSAGES.RATE_LIMIT_EXCEEDED;
 

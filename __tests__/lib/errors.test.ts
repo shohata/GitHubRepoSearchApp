@@ -31,7 +31,11 @@ import {
 describe("lib/errors.ts", () => {
   describe("GitHubAPIError", () => {
     it("正しいプロパティでエラーを作成する", () => {
-      const error = new GitHubAPIError("Test error", 400, new Error("Original"));
+      const error = new GitHubAPIError(
+        "Test error",
+        400,
+        new Error("Original")
+      );
 
       expect(error.message).toBe("Test error");
       expect(error.statusCode).toBe(400);
@@ -83,13 +87,18 @@ describe("lib/errors.ts", () => {
 
       it("リセット時刻ありでレート制限エラーをスローする", () => {
         const resetTime = Math.floor(Date.now() / 1000) + 3600; // 1時間後
-        const requestError = new RequestError("Rate limit exceeded", 403, {
-          headers: {
-            "x-ratelimit-remaining": "0",
-            "x-ratelimit-reset": resetTime.toString(),
-          },
-          data: "Rate limit exceeded",
-        } as any, {} as any);
+        const requestError = new RequestError(
+          "Rate limit exceeded",
+          403,
+          {
+            headers: {
+              "x-ratelimit-remaining": "0",
+              "x-ratelimit-reset": resetTime.toString(),
+            },
+            data: "Rate limit exceeded",
+          } as any,
+          {} as any
+        );
 
         try {
           handleGitHubError(requestError, "search");
