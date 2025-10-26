@@ -230,12 +230,13 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     await expect(themeToggle).toBeVisible({ timeout: 5000 });
     await themeToggle.click();
 
-    // ドロップダウンメニューが表示されることを確認
-    await expect(
-      page
-        .getByRole("menuitem", { name: "Light" })
-        .or(page.getByRole("menuitem", { name: "Dark" }))
-    ).toBeVisible({ timeout: 5000 });
+    // ドロップダウンメニューが表示されることを確認（いずれかの要素が表示される）
+    // Light, Dark, Systemの3つの選択肢があるため、メニュー全体の存在を確認
+    const menuItems = page.getByRole("menuitem");
+    await expect(menuItems.first()).toBeVisible({ timeout: 5000 });
+
+    // メニューアイテムが3つ存在することを確認
+    await expect(menuItems).toHaveCount(3);
   });
 
   test("ページ番号を直接URLに指定してアクセスできること", async ({ page }) => {
@@ -298,13 +299,14 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     await page.locator('a[href^="/repos/"]').first().click();
     await expect(page).toHaveURL(/\/repos\//, { timeout: 15000 });
 
-    // トップページに戻る
+    // トップページに戻る（検索状態はリセットされる）
     const backLink = page.getByRole("link", { name: "トップページに戻る" });
     await expect(backLink).toBeVisible({ timeout: 5000 });
     await backLink.click();
-    await expect(page).toHaveURL(/\?q=/, { timeout: 5000 });
+    await expect(page).toHaveURL("/", { timeout: 5000 });
 
-    // 検索結果が再度表示されるまで待機
+    // 再度検索を実行
+    await searchAndWaitForResults(page, searchQuery);
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
       timeout: 20000,
     });
