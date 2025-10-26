@@ -17,13 +17,18 @@ import type { GitHubSearchRepoResult } from "@/lib/types";
  * @returns {Promise<any>} JSONレスポンス
  * @throws {Error} フェッチに失敗した場合
  */
-const fetcher = (url: string) =>
-  fetch(url).then((res) => {
-    if (!res.ok) {
-      throw new Error("An error occurred while fetching the data.");
-    }
-    return res.json();
-  });
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    // サーバーからのエラーメッセージを取得
+    const errorData = await res.json().catch(() => ({}));
+    const message = errorData.message || "データの取得に失敗しました。";
+    throw new Error(message);
+  }
+
+  return res.json();
+};
 
 /**
  * 検索結果とページネーションのロジックを扱うカスタムフック

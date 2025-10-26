@@ -193,8 +193,8 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 同じクエリで再度検索
     await page.click('button[type="submit"]');
 
-    // 少し待機
-    await page.waitForTimeout(500);
+    // ネットワークがアイドル状態になるまで待機
+    await page.waitForLoadState("networkidle");
 
     // URLが変わっていないことを確認
     expect(page.url()).toBe(currentURL);

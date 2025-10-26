@@ -7,6 +7,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { getRepo } from "@/lib/github";
 import type { RepoParams } from "@/lib/validations";
 
+// ISR（Incremental Static Regeneration）設定
+// 3600秒（1時間）ごとにページを再生成
+export const revalidate = 3600;
+
 // サイトのメタデータ
 export async function generateMetadata(
   { params }: { params: Promise<RepoParams> },

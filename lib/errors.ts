@@ -53,14 +53,15 @@ export function handleGitHubError(
     switch (error.status) {
       case 403: {
         // レート制限情報を取得
-        const _remaining = error.response?.headers?.["x-ratelimit-remaining"];
+        const remaining = error.response?.headers?.["x-ratelimit-remaining"];
         const resetTime = error.response?.headers?.["x-ratelimit-reset"];
         let message: string = ERROR_MESSAGES.RATE_LIMIT_EXCEEDED;
 
-        // リセット時刻を含めたメッセージを生成
+        // リセット時刻と残り回数を含めたメッセージを生成
         if (resetTime) {
           const resetDate = new Date(Number(resetTime) * 1000);
-          message = `${ERROR_MESSAGES.RATE_LIMIT_EXCEEDED} リセット時刻: ${resetDate.toLocaleTimeString("ja-JP")}`;
+          const remainingText = remaining ? ` (残り: ${remaining}回)` : "";
+          message = `${ERROR_MESSAGES.RATE_LIMIT_EXCEEDED} リセット時刻: ${resetDate.toLocaleTimeString("ja-JP")}${remainingText}`;
         }
 
         throw new GitHubAPIError(message, 403, error);

@@ -9,7 +9,7 @@ export const useSearchForm = () => {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") ?? "";
 
-  //　フォーム送信時のハンドラ
+  // フォーム送信時のハンドラ
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
