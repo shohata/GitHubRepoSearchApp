@@ -83,9 +83,9 @@ export function SearchResults() {
           )}
 
           {/* ページ番号 */}
-          {pagination.map((item, index) => {
+          {pagination.map((item) => {
             if (item.type === "ellipsis") {
-              return <PaginationEllipsis key={`ellipsis-${index}`} />;
+              return <PaginationEllipsis key={item.id} />;
             }
             return (
               <PaginationItem key={item.pageNumber}>

@@ -1,0 +1,2 @@
+# Ignore CSS files (Tailwind v4 syntax not fully supported)
+app/globals.css

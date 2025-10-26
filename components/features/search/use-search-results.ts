@@ -7,7 +7,7 @@ import type { GitHubSearchRepoResult } from "@/lib/types";
 // ページネーションアイテムの型定義
 export type PaginationItem =
   | { type: "page"; pageNumber: number; isActive?: boolean }
-  | { type: "ellipsis" };
+  | { type: "ellipsis"; id: string };
 
 // JSONを返すシンプルなfetcher関数
 const fetcher = (url: string) =>
@@ -60,7 +60,7 @@ export function useSearchResults() {
     if (startPage > 1) {
       items.push({ type: "page", pageNumber: 1 });
       if (startPage > 2) {
-        items.push({ type: "ellipsis" });
+        items.push({ type: "ellipsis", id: "start" });
       }
     }
 
@@ -72,7 +72,7 @@ export function useSearchResults() {
     // 最後のページと省略記号(...)を追加
     if (endPage < totalPage) {
       if (endPage < totalPage - 1) {
-        items.push({ type: "ellipsis" });
+        items.push({ type: "ellipsis", id: "end" });
       }
       items.push({ type: "page", pageNumber: totalPage });
     }
