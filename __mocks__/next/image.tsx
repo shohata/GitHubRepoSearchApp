@@ -6,6 +6,8 @@
  * このモックが自動的に適用されます
  */
 
+// biome-ignore lint/performance/noImgElement: This is a mock for testing
+// biome-ignore lint/a11y/useAltText: Props are spread from Next.js Image
 const MockImage = (props: {
   src: string;
   alt: string;
@@ -20,7 +22,10 @@ const MockImage = (props: {
   fill?: boolean;
   sizes?: string;
   style?: React.CSSProperties;
-  onLoadingComplete?: (result: { naturalWidth: number; naturalHeight: number }) => void;
+  onLoadingComplete?: (result: {
+    naturalWidth: number;
+    naturalHeight: number;
+  }) => void;
   onLoad?: () => void;
   onError?: () => void;
 }) => {

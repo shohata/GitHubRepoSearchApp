@@ -9,28 +9,12 @@
 const MockLink = ({
   children,
   href,
-  as,
-  replace,
-  scroll,
-  shallow,
-  passHref,
-  prefetch,
-  locale,
-  legacyBehavior,
   onMouseEnter,
   onTouchStart,
   onClick,
 }: {
   children: React.ReactNode;
   href: string | { pathname: string; query?: Record<string, string> };
-  as?: string;
-  replace?: boolean;
-  scroll?: boolean;
-  shallow?: boolean;
-  passHref?: boolean;
-  prefetch?: boolean;
-  locale?: string | false;
-  legacyBehavior?: boolean;
   onMouseEnter?: () => void;
   onTouchStart?: () => void;
   onClick?: () => void;

@@ -1,5 +1,5 @@
-import type { GitHubSearchRepos } from "@/lib/types";
 import type { PaginationItem } from "@/lib/pagination";
+import type { GitHubSearchRepos } from "@/lib/types";
 
 /**
  * useSearchResults フック用のモック戻り値の型定義
@@ -77,11 +77,7 @@ export const searchResultsPresets = {
     }),
 
   /** 基本的なページネーション状態 */
-  withPagination: (
-    page: number,
-    totalPage: number,
-    repos: GitHubSearchRepos
-  ) =>
+  withPagination: (page: number, totalPage: number, repos: GitHubSearchRepos) =>
     createSearchResultsMock({
       query: "react",
       page,

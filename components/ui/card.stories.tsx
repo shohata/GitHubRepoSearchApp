@@ -70,8 +70,8 @@ export const RepoInfo: Story = {
       <CardHeader>
         <CardTitle>facebook/react</CardTitle>
         <CardDescription>
-          A declarative, efficient, and flexible JavaScript library for
-          building user interfaces.
+          A declarative, efficient, and flexible JavaScript library for building
+          user interfaces.
         </CardDescription>
       </CardHeader>
       <CardContent>

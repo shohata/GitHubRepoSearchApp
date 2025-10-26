@@ -1,10 +1,10 @@
 import { ZodError } from "zod";
+import { sanitizationTestCases } from "@/__tests__/__mocks__/validation-test-data";
 import {
   apiSearchRequestSchema,
   repoParamsSchema,
   searchParamsSchema,
 } from "@/lib/validations";
-import { sanitizationTestCases } from "@/__tests__/__mocks__/validation-test-data";
 
 describe("lib/validations.ts", () => {
   describe("searchParamsSchema", () => {

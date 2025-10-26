@@ -82,9 +82,7 @@ describe("fetcher (use-search-results.ts)", () => {
   });
 
   it("ネットワークエラーの場合", async () => {
-    (global.fetch as jest.Mock).mockRejectedValue(
-      new Error("Network error")
-    );
+    (global.fetch as jest.Mock).mockRejectedValue(new Error("Network error"));
 
     await expect(fetch("/api/search?q=test&page=1")).rejects.toThrow(
       "Network error"

@@ -23,15 +23,13 @@ jest.mock("octokit", () => {
 });
 
 // Import RequestError after mocking
-import { RequestError } from "octokit";
-
 // Import the mocked Octokit
-import { Octokit } from "octokit";
+import { Octokit, RequestError } from "octokit";
 
 // Import shared mock data
 import {
-  mockSearchResult,
   mockRepoDetails,
+  mockSearchResult,
 } from "@/__tests__/__mocks__/github-data";
 
 describe("lib/github.ts", () => {

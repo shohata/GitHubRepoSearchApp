@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { useSearchParams } from "next/navigation";
-import { useSearchResults } from "@/components/features/search/use-search-results";
 import { mockSimpleSearchResponse } from "@/__tests__/__mocks__/github-data";
+import { useSearchResults } from "@/components/features/search/use-search-results";
 
 // Next.jsのnavigationモジュールをモック
 jest.mock("next/navigation", () => ({

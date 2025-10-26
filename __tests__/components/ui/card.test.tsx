@@ -1,12 +1,12 @@
 import { render } from "@testing-library/react";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-  CardAction,
 } from "@/components/ui/card";
 
 describe("Card", () => {

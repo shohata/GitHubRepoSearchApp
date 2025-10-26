@@ -1,8 +1,5 @@
+import { paginationExpectations } from "@/__tests__/__mocks__/pagination-test-data";
 import { generatePagination } from "@/lib/pagination";
-import {
-  paginationExpectations,
-  paginationTestCases,
-} from "@/__tests__/__mocks__/pagination-test-data";
 
 describe("lib/pagination.ts", () => {
   describe("generatePagination", () => {

@@ -1,13 +1,12 @@
 import { render, screen } from "@testing-library/react";
-import { SearchResults } from "@/components/features/search/search-results";
-import { useSearchResults } from "@/components/features/search/use-search-results";
-
 // Import shared mock data
 import { mockMultipleRepos } from "@/__tests__/__mocks__/github-data";
 import {
   createSearchResultsMock,
   searchResultsPresets,
 } from "@/__tests__/__mocks__/search-results-mocks";
+import { SearchResults } from "@/components/features/search/search-results";
+import { useSearchResults } from "@/components/features/search/use-search-results";
 
 // useSearchResultsフックをモック
 jest.mock("@/components/features/search/use-search-results");

@@ -8,12 +8,7 @@ const config: Config = {
     "^@/(.*)$": "<rootDir>/$1",
   },
   testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
-  testPathIgnorePatterns: [
-    "/node_modules/",
-    "/.next/",
-    "/e2e/",
-    "/__mocks__/",
-  ],
+  testPathIgnorePatterns: ["/node_modules/", "/.next/", "/e2e/", "/__mocks__/"],
   transformIgnorePatterns: ["node_modules/(?!(octokit|@octokit)/)"],
   transform: {
     "^.+\\.(t|j)sx?$": [
