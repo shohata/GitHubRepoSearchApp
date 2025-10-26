@@ -37,6 +37,7 @@ export function ErrorDisplay({
       <p className="text-muted-foreground mt-2" id="error-message">
         {message}
       </p>
+      {/* biome-ignore lint/a11y/useSemanticElements: role="group" provides better semantic grouping for action buttons */}
       <div
         className="flex gap-4 mt-4"
         role="group"

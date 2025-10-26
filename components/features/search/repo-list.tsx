@@ -16,6 +16,7 @@ export const RepoList = memo(function RepoList({
   repos: GitHubSearchRepos;
 }) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: role="list" is intentionally used for grid layout with semantic list behavior
     <div
       className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8"
       role="list"

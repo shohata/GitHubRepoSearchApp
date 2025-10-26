@@ -9,12 +9,14 @@ import type { RepoStatCardProps } from "@/lib/types";
  */
 export function RepoStatCard({ icon: Icon, label, value }: RepoStatCardProps) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: role="group" provides better screen reader context for stat cards
     <div
       className="flex flex-col items-center justify-center p-4 bg-muted/50 rounded-lg"
       role="group"
       aria-label={`${label}: ${value.toLocaleString()}`}
     >
       <Icon className="h-6 w-6 text-muted-foreground mb-2" aria-hidden="true" />
+      {/* biome-ignore lint/a11y/useAriaPropsSupportedByRole: aria-label provides additional context for screen readers */}
       <div
         className="text-xl font-bold"
         aria-label={`${value.toLocaleString()}件`}

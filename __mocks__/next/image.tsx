@@ -6,8 +6,6 @@
  * このモックが自動的に適用されます
  */
 
-// biome-ignore lint/performance/noImgElement: This is a mock for testing
-// biome-ignore lint/a11y/useAltText: Props are spread from Next.js Image
 const MockImage = (props: {
   src: string;
   alt: string;
@@ -30,7 +28,11 @@ const MockImage = (props: {
   onError?: () => void;
 }) => {
   // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
-  return <img {...props} />;
+  return (
+    // biome-ignore lint/performance/noImgElement: This is a test mock component
+    // biome-ignore lint/a11y/useAltText: Props including alt are spread from Next.js Image
+    <img {...props} />
+  );
 };
 
 export default MockImage;

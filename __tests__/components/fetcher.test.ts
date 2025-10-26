@@ -17,11 +17,6 @@ describe("fetcher (use-search-results.ts)", () => {
       json: jest.fn().mockResolvedValue(mockData),
     });
 
-    // fetcherを動的にインポート
-    const { useSearchResults } = await import(
-      "@/components/features/search/use-search-results"
-    );
-
     // fetcherは内部関数なので、実際のフェッチをテスト
     const response = await fetch("/api/search?q=test&page=1");
     const data = await response.json();

@@ -36,6 +36,7 @@ export function SearchResults() {
   // 検索クエリがない場合
   if (!query) {
     return (
+      // biome-ignore lint/a11y/useSemanticElements: role="status" with aria-live is intentional for dynamic content announcements
       <div
         className="text-center text-muted-foreground mt-16"
         role="status"
@@ -49,6 +50,7 @@ export function SearchResults() {
   // データ取得中の表示
   if (isLoading) {
     return (
+      // biome-ignore lint/a11y/useSemanticElements: role="status" with aria-live is intentional for loading state announcements
       <div
         className="flex justify-center mt-8"
         role="status"
@@ -63,6 +65,7 @@ export function SearchResults() {
   // 検索結果がない場合
   if (repos.length === 0) {
     return (
+      // biome-ignore lint/a11y/useSemanticElements: role="status" with aria-live is intentional for no results announcements
       <div
         className="text-center text-muted-foreground mt-8"
         role="status"
@@ -76,6 +79,7 @@ export function SearchResults() {
   // 検索結果の表示
   return (
     <div>
+      {/* biome-ignore lint/a11y/useSemanticElements: role="status" with aria-live is intentional for result count announcements */}
       <p
         className="text-sm text-muted-foreground mt-4 mb-4"
         role="status"
