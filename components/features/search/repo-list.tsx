@@ -41,6 +41,8 @@ export const RepoList = memo(function RepoList({
                   height={48}
                   className="rounded-full"
                   loading="lazy"
+                  quality={75}
+                  sizes="48px"
                 />
               )}
               <CardTitle className="text-lg font-semibold">

@@ -1,13 +1,12 @@
 import { render, screen } from "@testing-library/react";
-// Import shared mock data
 import {
   mockMultipleRepos,
   mockRepoWithoutLanguage,
-} from "@/__tests__/__mocks__/github-data";
+} from "@/__tests__/fixtures";
 import { RepoList } from "@/components/features/search/repo-list";
 import type { GitHubSearchRepos } from "@/lib/types";
 
-// Next.jsのImageとLinkをモック（自動的に __mocks__/next/ が使用される）
+// Next.jsのImageとLinkをモック
 jest.mock("next/image");
 jest.mock("next/link");
 

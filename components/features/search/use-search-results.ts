@@ -51,6 +51,14 @@ export function useSearchResults() {
     }
   );
 
+  // エラーメッセージの型安全な処理
+  const errorMessage = useMemo(() => {
+    if (!error) return null;
+    return error instanceof Error
+      ? error.message
+      : "不明なエラーが発生しました。";
+  }, [error]);
+
   // 取得したデータから必要な値を抽出
   const repos = data?.items ?? [];
   const totalCount = data?.total_count ?? 0;
@@ -76,7 +84,7 @@ export function useSearchResults() {
   return {
     query,
     page,
-    error,
+    error: errorMessage,
     isLoading,
     repos,
     totalCount,

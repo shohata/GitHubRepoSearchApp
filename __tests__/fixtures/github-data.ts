@@ -10,6 +10,7 @@ const mockReactRepo = {
   owner: {
     login: "facebook",
     avatar_url: "https://example.com/avatar1.png",
+    html_url: "https://github.com/facebook",
   },
   description: "The library for web and native user interfaces.",
   stargazers_count: 220000,
@@ -18,9 +19,9 @@ const mockReactRepo = {
   open_issues_count: 1000,
   watchers_count: 7000,
   html_url: "https://github.com/facebook/react",
-  subscribers_count: 7000,
   created_at: "2013-05-24T16:15:54Z",
   updated_at: "2024-01-01T00:00:00Z",
+  pushed_at: "2024-01-01T00:00:00Z",
 } as GitHubRepo;
 
 /**
@@ -33,6 +34,7 @@ const mockVueRepo = {
   owner: {
     login: "vuejs",
     avatar_url: "https://example.com/avatar2.png",
+    html_url: "https://github.com/vuejs",
   },
   description: "The Progressive JavaScript Framework",
   stargazers_count: 150000,
@@ -41,9 +43,9 @@ const mockVueRepo = {
   open_issues_count: 300,
   watchers_count: 5000,
   html_url: "https://github.com/vuejs/vue",
-  subscribers_count: 5000,
   created_at: "2013-07-29T03:24:51Z",
   updated_at: "2024-01-01T00:00:00Z",
+  pushed_at: "2024-01-01T00:00:00Z",
 } as GitHubRepo;
 
 /**
@@ -112,6 +114,7 @@ export const mockSimpleSearchResponse = {
       owner: {
         login: "user1",
         avatar_url: "https://example.com/user1.png",
+        html_url: "https://github.com/user1",
       },
       description: "Test repository 1",
       stargazers_count: 100,
@@ -120,9 +123,9 @@ export const mockSimpleSearchResponse = {
       open_issues_count: 5,
       watchers_count: 50,
       html_url: "https://github.com/user1/repo1",
-      subscribers_count: 50,
       created_at: "2020-01-01T00:00:00Z",
       updated_at: "2024-01-01T00:00:00Z",
+      pushed_at: "2024-01-01T00:00:00Z",
     },
     {
       id: 2,
@@ -131,6 +134,7 @@ export const mockSimpleSearchResponse = {
       owner: {
         login: "user2",
         avatar_url: "https://example.com/user2.png",
+        html_url: "https://github.com/user2",
       },
       description: "Test repository 2",
       stargazers_count: 200,
@@ -139,9 +143,9 @@ export const mockSimpleSearchResponse = {
       open_issues_count: 10,
       watchers_count: 100,
       html_url: "https://github.com/user2/repo2",
-      subscribers_count: 100,
       created_at: "2020-06-01T00:00:00Z",
       updated_at: "2024-01-01T00:00:00Z",
+      pushed_at: "2024-01-01T00:00:00Z",
     },
   ],
   total_count: 100,

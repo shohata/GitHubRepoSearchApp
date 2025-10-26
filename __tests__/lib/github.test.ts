@@ -30,7 +30,7 @@ import { Octokit, RequestError } from "octokit";
 import {
   mockRepoDetails,
   mockSearchResult,
-} from "@/__tests__/__mocks__/github-data";
+} from "@/__tests__/fixtures/github-data";
 
 describe("lib/github.ts", () => {
   describe("searchRepos", () => {

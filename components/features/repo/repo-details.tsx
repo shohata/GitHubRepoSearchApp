@@ -20,6 +20,9 @@ export async function RepoDetails({ params }: { params: Promise<RepoParams> }) {
             width={64}
             height={64}
             className="rounded-full"
+            priority
+            quality={85}
+            sizes="64px"
           />
           <div>
             <CardTitle className="text-2xl font-bold mb-2">

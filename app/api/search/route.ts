@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import { env } from "@/lib/env";
 import { GitHubAPIError } from "@/lib/errors";
 import { searchRepos } from "@/lib/github";
+import { apiRateLimiter } from "@/lib/rate-limit";
 import { searchParamsSchema } from "@/lib/validations";
 
 /**
@@ -14,6 +15,41 @@ import { searchParamsSchema } from "@/lib/validations";
  */
 export async function GET(request: Request) {
   try {
+    // レート制限チェック
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0] ||
+      request.headers.get("x-real-ip") ||
+      "anonymous";
+
+    if (!apiRateLimiter.check(ip)) {
+      const rateLimitInfo = apiRateLimiter.getInfo(ip);
+      return NextResponse.json(
+        {
+          error: "Too Many Requests",
+          message:
+            "リクエスト数が制限を超えました。しばらくしてから再度お試しください。",
+          retryAfter: rateLimitInfo
+            ? Math.ceil((rateLimitInfo.reset - Date.now()) / 1000)
+            : 60,
+        },
+        {
+          status: 429,
+          headers: rateLimitInfo
+            ? {
+                "X-RateLimit-Limit": rateLimitInfo.limit.toString(),
+                "X-RateLimit-Remaining": rateLimitInfo.remaining.toString(),
+                "X-RateLimit-Reset": new Date(
+                  rateLimitInfo.reset
+                ).toISOString(),
+                "Retry-After": Math.ceil(
+                  (rateLimitInfo.reset - Date.now()) / 1000
+                ).toString(),
+              }
+            : {},
+        }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const q = searchParams.get("q");
     const page = searchParams.get("page");
@@ -27,14 +63,24 @@ export async function GET(request: Request) {
     // 環境に応じたキャッシュ戦略
     const cacheControl =
       env.NODE_ENV === "production"
-        ? "public, s-maxage=300, stale-while-revalidate=600"
-        : "no-cache";
+        ? "public, max-age=60, s-maxage=300, stale-while-revalidate=600"
+        : "no-store, must-revalidate";
 
-    return NextResponse.json(results, {
-      headers: {
-        "Cache-Control": cacheControl,
-      },
-    });
+    // レート制限情報を含むヘッダーを追加
+    const rateLimitInfo = apiRateLimiter.getInfo(ip);
+    const headers: Record<string, string> = {
+      "Cache-Control": cacheControl,
+    };
+
+    if (rateLimitInfo) {
+      headers["X-RateLimit-Limit"] = rateLimitInfo.limit.toString();
+      headers["X-RateLimit-Remaining"] = rateLimitInfo.remaining.toString();
+      headers["X-RateLimit-Reset"] = new Date(
+        rateLimitInfo.reset
+      ).toISOString();
+    }
+
+    return NextResponse.json(results, { headers });
   } catch (error) {
     // Zodバリデーションエラー
     if (error instanceof ZodError) {

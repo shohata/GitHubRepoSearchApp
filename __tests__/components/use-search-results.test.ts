@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useSearchParams } from "next/navigation";
-import { mockSimpleSearchResponse } from "@/__tests__/__mocks__/github-data";
+import { mockSimpleSearchResponse } from "@/__tests__/fixtures/github-data";
 import { useSearchResults } from "@/components/features/search/use-search-results";
 
 // Next.jsのnavigationモジュールをモック
@@ -149,7 +149,7 @@ describe("useSearchResults", () => {
 
     const { result } = renderHook(() => useSearchResults());
 
-    expect(result.current.error).toBe(mockError);
+    expect(result.current.error).toBe("API Error");
     expect(result.current.repos).toEqual([]);
   });
 
@@ -263,8 +263,7 @@ describe("useSearchResults", () => {
 
     const { result } = renderHook(() => useSearchResults());
 
-    expect(result.current.error).toBe(mockError);
-    expect(result.current.error?.message).toBe("API rate limit exceeded");
+    expect(result.current.error).toBe("API rate limit exceeded");
   });
 
   it("SWRのオプションが正しく設定される", () => {

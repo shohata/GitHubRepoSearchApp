@@ -30,7 +30,9 @@ export function SearchResults() {
 
   // エラー発生時の表示
   if (error) {
-    return <ErrorDisplay message={"リポジトリの検索に失敗しました。"} />;
+    return (
+      <ErrorDisplay title="リポジトリの検索に失敗しました。" message={error} />
+    );
   }
 
   // 検索クエリがない場合

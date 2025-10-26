@@ -1,4 +1,9 @@
-import type { GitHubRepo, GitHubSearchRepoResult } from "@/lib/types";
+import {
+  type GitHubRepo,
+  type GitHubSearchRepoResult,
+  toGitHubRepo,
+  toGitHubSearchRepoResult,
+} from "@/lib/types";
 import { ITEMS_PER_PAGE } from "./config";
 import { handleGitHubError } from "./errors";
 import { getOctokitClient } from "./octokit-client";
@@ -15,7 +20,8 @@ async function getRepo(owner: string, repo: string): Promise<GitHubRepo> {
   try {
     const octokit = getOctokitClient();
     const res = await octokit.rest.repos.get({ owner, repo });
-    return res.data;
+    // 生のAPIレスポンスをアプリケーション型に変換
+    return toGitHubRepo(res.data);
   } catch (error) {
     handleGitHubError(error, "repo");
   }
@@ -40,7 +46,8 @@ async function searchRepos(
       page,
       per_page: ITEMS_PER_PAGE,
     });
-    return res.data;
+    // 生のAPIレスポンスをアプリケーション型に変換
+    return toGitHubSearchRepoResult(res.data);
   } catch (error) {
     handleGitHubError(error, "search");
   }

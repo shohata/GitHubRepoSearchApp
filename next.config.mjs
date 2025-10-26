@@ -12,6 +12,8 @@ const nextConfig = {
   output: "standalone",
   // セキュリティヘッダーの設定
   async headers() {
+    const isDevelopment = process.env.NODE_ENV === "development";
+
     return [
       {
         source: "/:path*",
@@ -20,8 +22,12 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // Next.jsの開発環境で必要
-              "style-src 'self' 'unsafe-inline'", // Tailwind CSSで必要
+              // 本番環境ではunsafe-evalとunsafe-inlineを削除
+              isDevelopment
+                ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
+                : "script-src 'self'",
+              // 本番環境でもTailwind CSSのため'unsafe-inline'は必要
+              "style-src 'self' 'unsafe-inline'",
               "img-src 'self' https://avatars.githubusercontent.com data: blob:",
               "font-src 'self' data:",
               "connect-src 'self' https://api.github.com",

@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { sanitizationTestCases } from "@/__tests__/__mocks__/validation-test-data";
+import { sanitizationTestCases } from "@/__tests__/fixtures/validation-test-data";
 import {
   apiSearchRequestSchema,
   repoParamsSchema,

@@ -1,4 +1,4 @@
-import { paginationExpectations } from "@/__tests__/__mocks__/pagination-test-data";
+import { paginationExpectations } from "@/__tests__/fixtures/pagination-test-data";
 import { generatePagination } from "@/lib/pagination";
 
 describe("lib/pagination.ts", () => {
