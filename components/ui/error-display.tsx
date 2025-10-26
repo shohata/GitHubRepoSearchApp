@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { AlertTriangle, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { Button } from "./button";
 
 type ErrorDisplayProps = {

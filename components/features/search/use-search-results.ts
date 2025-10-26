@@ -2,7 +2,7 @@ import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import useSWR from "swr";
 import { ITEMS_PER_PAGE } from "@/lib/config";
-import { GitHubSearchRepoResult } from "@/lib/types";
+import type { GitHubSearchRepoResult } from "@/lib/types";
 
 // ページネーションアイテムの型定義
 export type PaginationItem =

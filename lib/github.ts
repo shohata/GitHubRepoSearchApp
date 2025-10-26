@@ -1,5 +1,5 @@
 import { Octokit, RequestError } from "octokit";
-import { GitHubRepo, GitHubSearchRepoResult } from "@/lib/types";
+import type { GitHubRepo, GitHubSearchRepoResult } from "@/lib/types";
 import { ITEMS_PER_PAGE } from "./config";
 
 const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN;

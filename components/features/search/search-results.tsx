@@ -1,6 +1,6 @@
 "use client";
 
-import { RepoList } from "./repo-list";
+import { ErrorDisplay } from "@/components/ui/error-display";
 import {
   Pagination,
   PaginationContent,
@@ -11,7 +11,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Spinner } from "@/components/ui/spinner";
-import { ErrorDisplay } from "@/components/ui/error-display";
+import { RepoList } from "./repo-list";
 import { useSearchResults } from "./use-search-results";
 
 // 検索結果を表示するコンポーネント

@@ -1,4 +1,4 @@
-import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
+import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 
 // GitHub API で取得したリポジトリの情報
 type GitHubRepo = RestEndpointMethodTypes["repos"]["get"]["response"]["data"];

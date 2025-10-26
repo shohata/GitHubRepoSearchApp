@@ -1,5 +1,5 @@
-import { searchRepos } from "@/lib/github";
 import { NextResponse } from "next/server";
+import { searchRepos } from "@/lib/github";
 
 /**
  * GitHubリポジトリを検索するAPIルート

@@ -1,11 +1,11 @@
-import { Metadata, ResolvingMetadata } from "next";
+import { ArrowLeft } from "lucide-react";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Spinner } from "@/components/ui/spinner";
-import { ArrowLeft } from "lucide-react";
-import { getRepo } from "@/lib/github";
-import { RepoParams } from "@/lib/types";
 import { RepoDetails } from "@/components/features/repo/repo-details";
+import { Spinner } from "@/components/ui/spinner";
+import { getRepo } from "@/lib/github";
+import type { RepoParams } from "@/lib/types";
 
 // サイトのメタデータ
 export async function generateMetadata(

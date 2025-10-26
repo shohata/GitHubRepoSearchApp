@@ -1,5 +1,5 @@
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent } from "react";
+import type { FormEvent } from "react";
 
 /**
  * 検索フォームのロジックを扱うカスタムフック

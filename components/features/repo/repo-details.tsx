@@ -1,9 +1,9 @@
+import { AlertCircle, Eye, GitFork, Star } from "lucide-react";
 import Image from "next/image";
-import { Star, Eye, GitFork, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RepoStatCard } from "./repo-stat-card";
-import { RepoParams } from "@/lib/types";
 import { getRepo } from "@/lib/github";
+import type { RepoParams } from "@/lib/types";
+import { RepoStatCard } from "./repo-stat-card";
 
 // リポジトリ詳細コンポーネント
 export async function RepoDetails({ params }: { params: Promise<RepoParams> }) {

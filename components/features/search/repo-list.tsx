@@ -1,7 +1,7 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GitHubSearchRepos } from "@/lib/types";
+import type { GitHubSearchRepos } from "@/lib/types";
 
 // リポジトリ検索結果のコンポーネント
 export function RepoList({ repos }: { repos: GitHubSearchRepos }) {

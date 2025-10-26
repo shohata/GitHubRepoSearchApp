@@ -1,4 +1,4 @@
-import { searchRepos, getRepo } from "@/lib/github";
+import { getRepo, searchRepos } from "@/lib/github";
 
 // Mock the entire octokit module
 jest.mock("octokit", () => {
