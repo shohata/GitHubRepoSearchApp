@@ -72,17 +72,6 @@ export const mockSearchResult = {
 export const mockRepoDetails = mockReactRepo;
 
 /**
- * useSearchResults テスト用の簡易APIレスポンスモック
- * 使用例: __tests__/components/use-search-results.test.ts
- * 既存のmockReactRepoとmockVueRepoを再利用
- */
-export const mockSimpleSearchResponse = {
-  items: [mockReactRepo, mockVueRepo],
-  total_count: 100,
-  incomplete_results: false,
-};
-
-/**
  * 言語が設定されていないリポジトリのモック（検索結果用）
  */
 export const mockRepoWithoutLanguage = {

@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useSearchParams } from "next/navigation";
-import { mockSimpleSearchResponse } from "@/__tests__/fixtures/github-data";
+import { mockSearchResult } from "@/__tests__/fixtures/github-data";
 import { useSearchResults } from "@/components/features/search/use-search-results";
 
 // Next.jsのnavigationモジュールをモック
@@ -85,14 +85,14 @@ describe("useSearchResults", () => {
     });
 
     (useSWR as jest.Mock).mockReturnValue({
-      data: mockSimpleSearchResponse,
+      data: { ...mockSearchResult, total_count: 100 },
       error: undefined,
       isLoading: false,
     });
 
     const { result } = renderHook(() => useSearchResults());
 
-    expect(result.current.repos).toEqual(mockSimpleSearchResponse.items);
+    expect(result.current.repos).toEqual(mockSearchResult.items);
     expect(result.current.totalCount).toBe(100);
     expect(result.current.query).toBe("typescript");
     expect(result.current.page).toBe(2);
