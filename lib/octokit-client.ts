@@ -1,4 +1,5 @@
 import { Octokit } from "octokit";
+import { env } from "./env";
 
 /**
  * Octokitクライアントのシングルトンインスタンス
@@ -14,7 +15,7 @@ let octokitInstance: Octokit | null = null;
  */
 export function getOctokitClient(): Octokit {
   if (!octokitInstance) {
-    const token = process.env.GITHUB_ACCESS_TOKEN;
+    const token = env.GITHUB_ACCESS_TOKEN;
     octokitInstance = token ? new Octokit({ auth: token }) : new Octokit();
   }
   return octokitInstance;

@@ -7,7 +7,8 @@ export const searchParamsSchema = z.object({
   q: z
     .string()
     .min(1, "検索クエリは必須です")
-    .max(256, "検索クエリは256文字以内で入力してください"),
+    .max(256, "検索クエリは256文字以内で入力してください")
+    .transform((val) => val.trim().replace(/[<>]/g, "")),
   page: z
     .string()
     .optional()

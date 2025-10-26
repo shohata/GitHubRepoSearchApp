@@ -19,22 +19,6 @@ export type GitHubSearchRepoResult =
 export type GitHubSearchRepos = GitHubSearchRepoResult["items"];
 
 /**
- * 検索ページのURLパラメータ
- */
-export type SearchParams = {
-  q?: string;
-  page?: string;
-};
-
-/**
- * リポジトリ詳細ページのパスパラメータ
- */
-export type RepoParams = {
-  owner: string;
-  repo: string;
-};
-
-/**
  * ページネーションアイテムの型定義
  */
 export type PaginationItem =

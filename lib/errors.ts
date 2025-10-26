@@ -1,4 +1,5 @@
 import { RequestError } from "octokit";
+import { env } from "./env";
 
 /**
  * GitHub APIエラーメッセージの定数
@@ -41,18 +42,29 @@ export function handleGitHubError(
 ): never {
   // RequestErrorの場合、ステータスコードに応じたエラーメッセージを返す
   if (error instanceof RequestError) {
-    console.error(
-      `GitHub API Error (${context}): ${error.status}`,
-      error.response
-    );
+    // 本番環境以外でのみエラーログを出力
+    if (env.NODE_ENV !== "production") {
+      console.error(
+        `GitHub API Error (${context}): ${error.status}`,
+        error.response
+      );
+    }
 
     switch (error.status) {
-      case 403:
-        throw new GitHubAPIError(
-          ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
-          403,
-          error
-        );
+      case 403: {
+        // レート制限情報を取得
+        const remaining = error.response?.headers?.["x-ratelimit-remaining"];
+        const resetTime = error.response?.headers?.["x-ratelimit-reset"];
+        let message: string = ERROR_MESSAGES.RATE_LIMIT_EXCEEDED;
+
+        // リセット時刻を含めたメッセージを生成
+        if (resetTime) {
+          const resetDate = new Date(Number(resetTime) * 1000);
+          message = `${ERROR_MESSAGES.RATE_LIMIT_EXCEEDED} リセット時刻: ${resetDate.toLocaleTimeString("ja-JP")}`;
+        }
+
+        throw new GitHubAPIError(message, 403, error);
+      }
       case 404:
         if (context === "repo") {
           throw new GitHubAPIError(
@@ -82,7 +94,9 @@ export function handleGitHubError(
     }
   }
 
-  // 予期しないエラーの場合
-  console.error(`Unexpected error (${context}):`, error);
+  // 予期しないエラーの場合（本番環境以外でのみログ出力）
+  if (env.NODE_ENV !== "production") {
+    console.error(`Unexpected error (${context}):`, error);
+  }
   throw new GitHubAPIError(ERROR_MESSAGES.UNEXPECTED_ERROR, undefined, error);
 }

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { GitHubSearchRepos } from "@/lib/types";
 
@@ -9,7 +10,11 @@ import type { GitHubSearchRepos } from "@/lib/types";
  *
  * @param repos - 検索結果のリポジトリリスト
  */
-export function RepoList({ repos }: { repos: GitHubSearchRepos }) {
+export const RepoList = memo(function RepoList({
+  repos,
+}: {
+  repos: GitHubSearchRepos;
+}) {
   return (
     <div
       className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8"
@@ -58,4 +63,4 @@ export function RepoList({ repos }: { repos: GitHubSearchRepos }) {
       ))}
     </div>
   );
-}
+});

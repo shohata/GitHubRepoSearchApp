@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { env } from "@/lib/env";
 import { GitHubAPIError } from "@/lib/errors";
 import { searchRepos } from "@/lib/github";
 import { searchParamsSchema } from "@/lib/validations";
@@ -23,9 +24,15 @@ export async function GET(request: Request) {
     // サーバーサイドでGitHub APIを呼び出す
     const results = await searchRepos(validatedParams.q, validatedParams.page);
 
+    // 環境に応じたキャッシュ戦略
+    const cacheControl =
+      env.NODE_ENV === "production"
+        ? "public, s-maxage=300, stale-while-revalidate=600"
+        : "no-cache";
+
     return NextResponse.json(results, {
       headers: {
-        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
+        "Cache-Control": cacheControl,
       },
     });
   } catch (error) {
@@ -45,7 +52,9 @@ export async function GET(request: Request) {
 
     // GitHub APIエラー
     if (error instanceof GitHubAPIError) {
-      console.error("GitHub API Error:", error.message, error.statusCode);
+      if (env.NODE_ENV !== "production") {
+        console.error("GitHub API Error:", error.message, error.statusCode);
+      }
       return NextResponse.json(
         {
           error: "GitHub API Error",
@@ -56,7 +65,9 @@ export async function GET(request: Request) {
     }
 
     // 予期しないエラー
-    console.error("Unexpected API error:", error);
+    if (env.NODE_ENV !== "production") {
+      console.error("Unexpected API error:", error);
+    }
     return NextResponse.json(
       {
         error: "Internal Server Error",

@@ -2,7 +2,7 @@ import { AlertCircle, Eye, GitFork, Star } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getRepo } from "@/lib/github";
-import type { RepoParams } from "@/lib/types";
+import type { RepoParams } from "@/lib/validations";
 import { RepoStatCard } from "./repo-stat-card";
 
 // リポジトリ詳細コンポーネント

@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { RepoDetails } from "@/components/features/repo/repo-details";
 import { Spinner } from "@/components/ui/spinner";
 import { getRepo } from "@/lib/github";
-import type { RepoParams } from "@/lib/types";
+import type { RepoParams } from "@/lib/validations";
 
 // サイトのメタデータ
 export async function generateMetadata(

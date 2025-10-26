@@ -6,7 +6,8 @@ import {
   MAX_PAGINATION_PAGES,
   MAX_SEARCH_RESULTS,
 } from "@/lib/config";
-import type { GitHubSearchRepoResult, PaginationItem } from "@/lib/types";
+import { generatePagination } from "@/lib/pagination";
+import type { GitHubSearchRepoResult } from "@/lib/types";
 
 /**
  * JSONを返すシンプルなfetcher関数
@@ -62,39 +63,10 @@ export function useSearchResults() {
   );
 
   // ページネーションの表示ロジック
-  const pagination = useMemo(() => {
-    const items: PaginationItem[] = [];
-    let startPage = Math.max(1, page - Math.floor(MAX_PAGINATION_PAGES / 2));
-    const endPage = Math.min(totalPage, startPage + MAX_PAGINATION_PAGES - 1);
-
-    // 表示ページ数が最大表示数に満たない場合、開始ページを調整
-    if (endPage - startPage + 1 < MAX_PAGINATION_PAGES) {
-      startPage = Math.max(1, endPage - MAX_PAGINATION_PAGES + 1);
-    }
-
-    // 最初のページと省略記号(...)を追加
-    if (startPage > 1) {
-      items.push({ type: "page", pageNumber: 1 });
-      if (startPage > 2) {
-        items.push({ type: "ellipsis", id: "start" });
-      }
-    }
-
-    // 中間のページ番号を追加
-    for (let i = startPage; i <= endPage; i++) {
-      items.push({ type: "page", pageNumber: i, isActive: i === page });
-    }
-
-    // 最後のページと省略記号(...)を追加
-    if (endPage < totalPage) {
-      if (endPage < totalPage - 1) {
-        items.push({ type: "ellipsis", id: "end" });
-      }
-      items.push({ type: "page", pageNumber: totalPage });
-    }
-
-    return items;
-  }, [page, totalPage]);
+  const pagination = useMemo(
+    () => generatePagination(page, totalPage, MAX_PAGINATION_PAGES),
+    [page, totalPage]
+  );
 
   return {
     query,
