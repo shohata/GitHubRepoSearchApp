@@ -8,6 +8,8 @@ const nextConfig = {
       },
     ],
   },
+  // Dockerビルド用のstandaloneモード設定
+  output: "standalone",
 };
 
 export default nextConfig;

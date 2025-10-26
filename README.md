@@ -105,6 +105,55 @@ pnpm exec playwright install
 
 For more details, see [CLAUDE.md](CLAUDE.md).
 
+## Docker
+
+This project supports Docker for easy deployment and consistent development environments.
+
+### Production Build
+
+Build and run the application using Docker:
+
+```bash
+# Build the Docker image
+docker build -t github-repo-search-app .
+
+# Run the container
+docker run -p 3000:3000 github-repo-search-app
+```
+
+Or use Docker Compose:
+
+```bash
+# Build and run
+docker-compose up -d
+
+# Stop the container
+docker-compose down
+```
+
+The application will be available at `http://localhost:3000`.
+
+### Development Environment
+
+To run the development server in Docker:
+
+```bash
+# Start the development container
+docker-compose --profile dev up dev
+
+# Stop the development container
+docker-compose --profile dev down
+```
+
+The development server will be available at `http://localhost:3001` with hot reload enabled.
+
+### Docker Files
+
+- `Dockerfile` - Multi-stage production build optimized for size and security
+- `Dockerfile.dev` - Development environment with hot reload
+- `docker-compose.yml` - Orchestration for both production and development
+- `.dockerignore` - Files to exclude from Docker builds
+
 ## Documentation
 
 - [DESIGN.md](DESIGN.md) - Design philosophy and key features
