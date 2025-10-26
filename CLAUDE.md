@@ -266,49 +266,6 @@ pnpm test
 pnpm exec playwright install --force
 ```
 
-## CI/CD統合
-
-GitHub Actionsでテストを自動実行する例:
-
-```yaml
-# .github/workflows/test.yml
-name: Test
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Run unit tests
-        run: pnpm test
-
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps
-
-      - name: Run E2E tests
-        run: pnpm test:e2e
-
-      - name: Build
-        run: pnpm build
-```
-
 ## 参考リソース
 
 - [Next.js Documentation](https://nextjs.org/docs)
