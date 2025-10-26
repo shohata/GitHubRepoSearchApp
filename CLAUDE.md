@@ -191,31 +191,20 @@ try {
 
 ```
 GitHubRepoSearchApp/
-├── app/                          # Next.js App Router
-│   ├── page.tsx                  # トップページ（検索機能）
-│   ├── layout.tsx                # ルートレイアウト
-│   ├── error.tsx                 # エラーページ
-│   └── repos/[owner]/[repo]/     # 詳細ページ
-│       ├── page.tsx
-│       └── error.tsx
-├── components/                   # コンポーネント
-│   ├── ui/                       # shadcn/ui コンポーネント
-│   ├── theme-provider.tsx        # テーマプロバイダー
-│   └── theme-toggle.tsx          # テーマ切り替え
-├── lib/                          # ライブラリとユーティリティ
-│   ├── github.ts                 # GitHub API クライアント
-│   ├── types.ts                  # 型定義
-│   ├── config.ts                 # 設定値
-│   └── utils.ts                  # ユーティリティ関数
-├── __tests__/                    # ユニットテスト
-│   └── lib/
-│       └── github.test.ts
-├── e2e/                          # E2Eテスト
-│   └── app.spec.ts
-├── jest.config.ts                # Jest設定
-├── playwright.config.ts          # Playwright設定
-└── next.config.mjs               # Next.js設定
+├── app/                 # Next.js App Router（ページとレイアウト）
+├── components/          # UIコンポーネント（shadcn/ui含む）
+├── lib/                 # API通信、型定義、ユーティリティ
+├── __tests__/           # ユニットテスト（Jest）
+├── e2e/                 # E2Eテスト（Playwright）
+└── 各種設定ファイル      # jest.config.ts, playwright.config.ts など
 ```
+
+### 主要ファイル
+
+- `lib/github.ts` - GitHub API クライアント
+- `lib/types.ts` - 型定義
+- `app/page.tsx` - トップページ（検索機能）
+- `app/repos/[owner]/[repo]/page.tsx` - リポジトリ詳細ページ
 
 ## よくある開発タスク
 
