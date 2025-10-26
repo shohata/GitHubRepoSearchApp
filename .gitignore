@@ -3,6 +3,9 @@
 # vscode
 /.vscode/
 
+# Claude Code
+/.claude/
+
 # dependencies
 /node_modules
 /.pnp
