@@ -39,7 +39,7 @@ describe("lib/github.ts", () => {
       resetOctokitClient();
     });
 
-    it("should return search results on a successful request", async () => {
+    it("正常なリクエストで検索結果を返す", async () => {
       const mockOctokit = {
         rest: {
           search: {
@@ -60,7 +60,7 @@ describe("lib/github.ts", () => {
       });
     });
 
-    it("should throw an error when rate limit is exceeded (403)", async () => {
+    it("レート制限超過時にエラーを投げる (403)", async () => {
       const mockError = new RequestError("Rate limit exceeded", 403, {
         data: "Rate limit exceeded",
       });
@@ -80,7 +80,7 @@ describe("lib/github.ts", () => {
       );
     });
 
-    it("should throw an error when query is invalid (422)", async () => {
+    it("クエリが無効な場合にエラーを投げる (422)", async () => {
       const mockError = new RequestError("Validation failed", 422, {
         data: "Validation failed",
       });
@@ -100,7 +100,7 @@ describe("lib/github.ts", () => {
       );
     });
 
-    it("should throw an error on other failed requests (500)", async () => {
+    it("その他のリクエスト失敗時にエラーを投げる (500)", async () => {
       const mockError = new RequestError("Internal Server Error", 500, {
         data: "Internal Server Error",
       });
@@ -127,7 +127,7 @@ describe("lib/github.ts", () => {
       resetOctokitClient();
     });
 
-    it("should return repository details on a successful request", async () => {
+    it("正常なリクエストでリポジトリ詳細を返す", async () => {
       const mockOctokit = {
         rest: {
           repos: {
@@ -147,7 +147,7 @@ describe("lib/github.ts", () => {
       });
     });
 
-    it("should throw an error when rate limit is exceeded (403)", async () => {
+    it("レート制限超過時にエラーを投げる (403)", async () => {
       const mockError = new RequestError("Rate limit exceeded", 403, {
         data: "Rate limit exceeded",
       });
@@ -167,7 +167,7 @@ describe("lib/github.ts", () => {
       );
     });
 
-    it("should throw an error when repository is not found (404)", async () => {
+    it("リポジトリが見つからない場合にエラーを投げる (404)", async () => {
       const mockError = new RequestError("Not Found", 404, {
         data: "Not Found",
       });
@@ -187,7 +187,7 @@ describe("lib/github.ts", () => {
       );
     });
 
-    it("should throw an error on other failed requests (500)", async () => {
+    it("その他のリクエスト失敗時にエラーを投げる (500)", async () => {
       const mockError = new RequestError("Internal Server Error", 500, {
         data: "Internal Server Error",
       });
