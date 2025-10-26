@@ -87,11 +87,8 @@ pnpm test:coverage
 ### E2Eテスト (Playwright)
 
 ```bash
-# 全てのE2Eテストを実行
+# 全てのE2Eテストを実行（CLIモード）
 pnpm test:e2e
-
-# CLIモードでE2Eテストを実行
-pnpm test:e2e:cli
 
 # UIモードでE2Eテストを実行
 pnpm test:e2e:ui
@@ -146,11 +143,10 @@ pnpm exec playwright install
 1. **機能開発**: 新機能を実装
 2. **ユニットテスト作成**: `__tests__/`にテストを追加
 3. **E2Eテスト作成**: `e2e/`にテストを追加（必要に応じて）
-4. **テスト実行**: `pnpm test`と`pnpm test:e2e:cli`で確認
+4. **テスト実行**: `pnpm test`と`pnpm test:e2e`で確認
 5. **品質チェック（必須）**:
    - `pnpm format` でコードフォーマット
    - `pnpm lint` でコード品質を確認
-   - `pnpm test` でテストを実行
    - `pnpm build` で本番ビルドが成功することを確認
    - **全てのエラーを解消してから次へ進む**
 6. **コミット**: 変更をコミット
@@ -166,10 +162,7 @@ pnpm format
 # 2. Lintチェックを実行
 pnpm lint
 
-# 3. テストを実行
-pnpm test
-
-# 4. 本番ビルドを実行
+# 3. 本番ビルドを実行
 pnpm build
 ```
 

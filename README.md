@@ -81,11 +81,8 @@ pnpm test:coverage
 ### E2E Tests (Playwright)
 
 ```bash
-# Run all E2E tests
+# Run all E2E tests (CLI mode)
 pnpm test:e2e
-
-# Run E2E tests in CLI mode
-pnpm test:e2e:ui
 
 # Run E2E tests in UI mode
 pnpm test:e2e:ui
