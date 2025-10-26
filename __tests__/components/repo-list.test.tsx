@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/react";
 import { RepoList } from "@/components/features/search/repo-list";
 import type { GitHubSearchRepos } from "@/lib/types";
 
+// Import shared mock data
+import { mockMultipleRepos } from "@/__tests__/__mocks__/github-data";
+
 // Next.jsのImageとLinkをモック
 jest.mock("next/image", () => ({
   __esModule: true,
@@ -30,66 +33,29 @@ jest.mock("next/link", () => ({
 }));
 
 describe("RepoList", () => {
-  const mockRepos: GitHubSearchRepos = [
-    {
-      id: 1,
-      name: "react",
-      full_name: "facebook/react",
-      owner: {
-        login: "facebook",
-        avatar_url: "https://example.com/avatar1.png",
-      },
-      language: "JavaScript",
-      html_url: "https://github.com/facebook/react",
-      description: "A declarative, efficient, and flexible JavaScript library",
-      stargazers_count: 200000,
-      forks_count: 40000,
-      open_issues_count: 500,
-      created_at: "2013-05-24T16:15:54Z",
-      updated_at: "2024-01-01T00:00:00Z",
-    },
-    {
-      id: 2,
-      name: "vue",
-      full_name: "vuejs/vue",
-      owner: {
-        login: "vuejs",
-        avatar_url: "https://example.com/avatar2.png",
-      },
-      language: "TypeScript",
-      html_url: "https://github.com/vuejs/vue",
-      description: "The Progressive JavaScript Framework",
-      stargazers_count: 150000,
-      forks_count: 30000,
-      open_issues_count: 300,
-      created_at: "2013-07-29T03:24:51Z",
-      updated_at: "2024-01-01T00:00:00Z",
-    },
-  ];
-
   test("リポジトリのリストが正しく表示される", () => {
-    render(<RepoList repos={mockRepos} />);
+    render(<RepoList repos={mockMultipleRepos} />);
 
     expect(screen.getByText("react")).toBeInTheDocument();
     expect(screen.getByText("vue")).toBeInTheDocument();
   });
 
   test("各リポジトリのオーナー情報が表示される", () => {
-    render(<RepoList repos={mockRepos} />);
+    render(<RepoList repos={mockMultipleRepos} />);
 
     expect(screen.getByText("facebook")).toBeInTheDocument();
     expect(screen.getByText("vuejs")).toBeInTheDocument();
   });
 
   test("各リポジトリの言語が表示される", () => {
-    render(<RepoList repos={mockRepos} />);
+    render(<RepoList repos={mockMultipleRepos} />);
 
     expect(screen.getByText("JavaScript")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
   });
 
   test("リポジトリへのリンクが正しく設定される", () => {
-    render(<RepoList repos={mockRepos} />);
+    render(<RepoList repos={mockMultipleRepos} />);
 
     const reactLink = screen.getByRole("link", { name: /react/i });
     expect(reactLink).toHaveAttribute("href", "/repos/facebook/react");
@@ -99,7 +65,7 @@ describe("RepoList", () => {
   });
 
   test("オーナーのアバター画像が表示される", () => {
-    render(<RepoList repos={mockRepos} />);
+    render(<RepoList repos={mockMultipleRepos} />);
 
     const facebookAvatar = screen.getByAltText("facebookのアバター");
     expect(facebookAvatar).toHaveAttribute(
@@ -117,7 +83,7 @@ describe("RepoList", () => {
   test("言語が設定されていない場合、N/Aが表示される", () => {
     const reposWithoutLanguage: GitHubSearchRepos = [
       {
-        ...mockRepos[0],
+        ...mockMultipleRepos[0],
         language: null,
       },
     ];

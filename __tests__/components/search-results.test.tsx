@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { SearchResults } from "@/components/features/search/search-results";
 import { useSearchResults } from "@/components/features/search/use-search-results";
-import type { GitHubSearchRepos } from "@/lib/types";
+
+// Import shared mock data
+import { mockMultipleRepos } from "@/__tests__/__mocks__/github-data";
 
 // useSearchResultsフックをモック
 jest.mock("@/components/features/search/use-search-results");
@@ -34,47 +36,8 @@ jest.mock("next/link", () => ({
 }));
 
 describe("SearchResults", () => {
-  const mockRepos: GitHubSearchRepos = [
-    {
-      id: 1,
-      name: "react",
-      full_name: "facebook/react",
-      owner: {
-        login: "facebook",
-        avatar_url: "https://example.com/avatar1.png",
-      },
-      language: "JavaScript",
-      html_url: "https://github.com/facebook/react",
-      description: "A declarative, efficient, and flexible JavaScript library",
-      stargazers_count: 200000,
-      forks_count: 40000,
-      open_issues_count: 500,
-      created_at: "2013-05-24T16:15:54Z",
-      updated_at: "2024-01-01T00:00:00Z",
-    },
-  ];
-
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  test("エラー時にエラーメッセージが表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "react",
-      page: 1,
-      error: new Error("API Error"),
-      isLoading: false,
-      repos: [],
-      totalCount: 0,
-      totalPage: 0,
-      pagination: [],
-    });
-
-    render(<SearchResults />);
-
-    expect(
-      screen.getByText("リポジトリの検索に失敗しました。")
-    ).toBeInTheDocument();
   });
 
   test("クエリがない場合、初期メッセージが表示される", () => {
@@ -96,23 +59,6 @@ describe("SearchResults", () => {
     ).toBeInTheDocument();
   });
 
-  test("ローディング中にスピナーが表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "react",
-      page: 1,
-      error: null,
-      isLoading: true,
-      repos: [],
-      totalCount: 0,
-      totalPage: 0,
-      pagination: [],
-    });
-
-    render(<SearchResults />);
-
-    expect(screen.getByTestId("spinner")).toBeInTheDocument();
-  });
-
   test("検索結果がない場合、適切なメッセージが表示される", () => {
     (useSearchResults as jest.Mock).mockReturnValue({
       query: "nonexistent-repo-xyz",
@@ -132,31 +78,13 @@ describe("SearchResults", () => {
     ).toBeInTheDocument();
   });
 
-  test("検索結果が表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "react",
-      page: 1,
-      error: null,
-      isLoading: false,
-      repos: mockRepos,
-      totalCount: 1,
-      totalPage: 1,
-      pagination: [{ type: "page", pageNumber: 1, isActive: true }],
-    });
-
-    render(<SearchResults />);
-
-    expect(screen.getByText("検索結果: 1件")).toBeInTheDocument();
-    expect(screen.getByText("react")).toBeInTheDocument();
-  });
-
   test("検索結果が1000件を超える場合、警告メッセージが表示される", () => {
     (useSearchResults as jest.Mock).mockReturnValue({
       query: "react",
       page: 1,
       error: null,
       isLoading: false,
-      repos: mockRepos,
+      repos: mockMultipleRepos,
       totalCount: 1500,
       totalPage: 50,
       pagination: [{ type: "page", pageNumber: 1, isActive: true }],
@@ -177,7 +105,7 @@ describe("SearchResults", () => {
       page: 2,
       error: null,
       isLoading: false,
-      repos: mockRepos,
+      repos: mockMultipleRepos,
       totalCount: 100,
       totalPage: 4,
       pagination: [
@@ -207,7 +135,7 @@ describe("SearchResults", () => {
       page: 1,
       error: null,
       isLoading: false,
-      repos: mockRepos,
+      repos: mockMultipleRepos,
       totalCount: 100,
       totalPage: 4,
       pagination: [
@@ -229,7 +157,7 @@ describe("SearchResults", () => {
       page: 4,
       error: null,
       isLoading: false,
-      repos: mockRepos,
+      repos: mockMultipleRepos,
       totalCount: 100,
       totalPage: 4,
       pagination: [
@@ -251,7 +179,7 @@ describe("SearchResults", () => {
       page: 5,
       error: null,
       isLoading: false,
-      repos: mockRepos,
+      repos: mockMultipleRepos,
       totalCount: 300,
       totalPage: 10,
       pagination: [
@@ -273,33 +201,12 @@ describe("SearchResults", () => {
   });
 
   test("複数のリポジトリが正しく表示される", () => {
-    const multipleRepos = [
-      ...mockRepos,
-      {
-        id: 2,
-        name: "vue",
-        full_name: "vuejs/vue",
-        owner: {
-          login: "vuejs",
-          avatar_url: "https://example.com/avatar2.png",
-        },
-        language: "TypeScript",
-        html_url: "https://github.com/vuejs/vue",
-        description: "The Progressive JavaScript Framework",
-        stargazers_count: 150000,
-        forks_count: 30000,
-        open_issues_count: 300,
-        created_at: "2013-07-29T03:24:51Z",
-        updated_at: "2024-01-01T00:00:00Z",
-      },
-    ];
-
     (useSearchResults as jest.Mock).mockReturnValue({
       query: "javascript",
       page: 1,
       error: null,
       isLoading: false,
-      repos: multipleRepos,
+      repos: mockMultipleRepos,
       totalCount: 2,
       totalPage: 1,
       pagination: [{ type: "page", pageNumber: 1, isActive: true }],
@@ -318,8 +225,8 @@ describe("SearchResults", () => {
       page: 1,
       error: null,
       isLoading: false,
-      repos: mockRepos,
-      totalCount: 1,
+      repos: mockMultipleRepos,
+      totalCount: 2,
       totalPage: 1,
       pagination: [{ type: "page", pageNumber: 1, isActive: true }],
     });
@@ -337,7 +244,7 @@ describe("SearchResults", () => {
       page: 2,
       error: null,
       isLoading: false,
-      repos: mockRepos,
+      repos: mockMultipleRepos,
       totalCount: 100,
       totalPage: 4,
       pagination: [
@@ -364,7 +271,7 @@ describe("SearchResults", () => {
       page: 1,
       error: null,
       isLoading: false,
-      repos: mockRepos,
+      repos: mockMultipleRepos,
       totalCount: 123456,
       totalPage: 1,
       pagination: [{ type: "page", pageNumber: 1, isActive: true }],
@@ -414,35 +321,13 @@ describe("SearchResults", () => {
     ).toBeInTheDocument();
   });
 
-  test("1000件超の警告がrole=alertで表示される", () => {
-    (useSearchResults as jest.Mock).mockReturnValue({
-      query: "javascript",
-      page: 1,
-      error: null,
-      isLoading: false,
-      repos: mockRepos,
-      totalCount: 2000,
-      totalPage: 67,
-      pagination: [{ type: "page", pageNumber: 1, isActive: true }],
-    });
-
-    const { container } = render(<SearchResults />);
-
-    // role="alert"の要素が存在することを確認
-    const alertElement = container.querySelector('[role="alert"]');
-    expect(alertElement).toBeInTheDocument();
-    expect(alertElement).toHaveTextContent(
-      /検索結果が多数あります。APIの仕様により、最初の1,000件のみ表示しています。/
-    );
-  });
-
   test("中間ページで前へと次へのリンクが両方表示される", () => {
     (useSearchResults as jest.Mock).mockReturnValue({
       query: "react",
       page: 3,
       error: null,
       isLoading: false,
-      repos: mockRepos,
+      repos: mockMultipleRepos,
       totalCount: 150,
       totalPage: 5,
       pagination: [

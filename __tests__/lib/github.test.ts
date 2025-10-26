@@ -25,44 +25,14 @@ jest.mock("octokit", () => {
 // Import RequestError after mocking
 import { RequestError } from "octokit";
 
-// Mock data for searchRepos
-const mockSearchResult = {
-  total_count: 1,
-  items: [
-    {
-      id: 10270250,
-      full_name: "facebook/react",
-      name: "react",
-      owner: { login: "facebook" },
-      description: "The library for web and native user interfaces.",
-      stargazers_count: 220000,
-      language: "JavaScript",
-      forks_count: 45000,
-      open_issues_count: 1000,
-      watchers_count: 7000,
-    },
-  ],
-  incomplete_results: false,
-};
-
-// Mock data for getRepo
-const mockRepoDetails = {
-  id: 10270250,
-  full_name: "facebook/react",
-  name: "react",
-  owner: { login: "facebook" },
-  description: "The library for web and native user interfaces.",
-  stargazers_count: 220000,
-  language: "JavaScript",
-  forks_count: 45000,
-  open_issues_count: 1000,
-  watchers_count: 7000,
-  html_url: "https://github.com/facebook/react",
-  subscribers_count: 7000,
-};
-
 // Import the mocked Octokit
 import { Octokit } from "octokit";
+
+// Import shared mock data
+import {
+  mockSearchResult,
+  mockRepoDetails,
+} from "@/__tests__/__mocks__/github-data";
 
 describe("lib/github.ts", () => {
   describe("searchRepos", () => {
