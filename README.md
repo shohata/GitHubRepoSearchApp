@@ -90,10 +90,22 @@ pnpm test:e2e:ui
 pnpm test:e2e:debug
 ```
 
-For more details, see [CLAUDE.md](CLAUDE.md) and [README.test.md](README.test.md).
+### Test File Locations
+
+- Unit tests: `__tests__/**/*.test.ts(x)`
+- E2E tests: `e2e/**/*.spec.ts`
+
+### Initial Setup
+
+Install Playwright browsers:
+
+```bash
+pnpm exec playwright install
+```
+
+For more details, see [CLAUDE.md](CLAUDE.md).
 
 ## Documentation
 
 - [DESIGN.md](DESIGN.md) - Design philosophy and key features
 - [CLAUDE.md](CLAUDE.md) - Development guide for Claude Code
-- [README.test.md](README.test.md) - Testing documentation
