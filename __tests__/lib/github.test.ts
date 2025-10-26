@@ -1,7 +1,7 @@
-import { searchRepos, getRepo } from '@/lib/github';
+import { searchRepos, getRepo } from "@/lib/github";
 
 // Mock the entire octokit module
-jest.mock('octokit', () => {
+jest.mock("octokit", () => {
   // Define RequestError inside the mock
   class RequestError extends Error {
     status: number;
@@ -11,7 +11,7 @@ jest.mock('octokit', () => {
       super(message);
       this.status = status;
       this.response = response;
-      this.name = 'RequestError';
+      this.name = "RequestError";
     }
   }
 
@@ -22,7 +22,7 @@ jest.mock('octokit', () => {
 });
 
 // Import RequestError after mocking
-import { RequestError } from 'octokit';
+import { RequestError } from "octokit";
 
 // Mock data for searchRepos
 const mockSearchResult = {
@@ -30,12 +30,12 @@ const mockSearchResult = {
   items: [
     {
       id: 10270250,
-      full_name: 'facebook/react',
-      name: 'react',
-      owner: { login: 'facebook' },
-      description: 'The library for web and native user interfaces.',
+      full_name: "facebook/react",
+      name: "react",
+      owner: { login: "facebook" },
+      description: "The library for web and native user interfaces.",
       stargazers_count: 220000,
-      language: 'JavaScript',
+      language: "JavaScript",
       forks_count: 45000,
       open_issues_count: 1000,
       watchers_count: 7000,
@@ -47,29 +47,29 @@ const mockSearchResult = {
 // Mock data for getRepo
 const mockRepoDetails = {
   id: 10270250,
-  full_name: 'facebook/react',
-  name: 'react',
-  owner: { login: 'facebook' },
-  description: 'The library for web and native user interfaces.',
+  full_name: "facebook/react",
+  name: "react",
+  owner: { login: "facebook" },
+  description: "The library for web and native user interfaces.",
   stargazers_count: 220000,
-  language: 'JavaScript',
+  language: "JavaScript",
   forks_count: 45000,
   open_issues_count: 1000,
   watchers_count: 7000,
-  html_url: 'https://github.com/facebook/react',
+  html_url: "https://github.com/facebook/react",
   subscribers_count: 7000,
 };
 
 // Import the mocked Octokit
-import { Octokit } from 'octokit';
+import { Octokit } from "octokit";
 
-describe('lib/github.ts', () => {
-  describe('searchRepos', () => {
+describe("lib/github.ts", () => {
+  describe("searchRepos", () => {
     beforeEach(() => {
       jest.clearAllMocks();
     });
 
-    it('should return search results on a successful request', async () => {
+    it("should return search results on a successful request", async () => {
       const mockOctokit = {
         rest: {
           search: {
@@ -80,19 +80,19 @@ describe('lib/github.ts', () => {
 
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
-      const result = await searchRepos('react', 1);
+      const result = await searchRepos("react", 1);
 
       expect(result).toEqual(mockSearchResult);
       expect(mockOctokit.rest.search.repos).toHaveBeenCalledWith({
-        q: 'react',
+        q: "react",
         page: 1,
         per_page: 12,
       });
     });
 
-    it('should throw an error when rate limit is exceeded (403)', async () => {
-      const mockError = new RequestError('Rate limit exceeded', 403, {
-        data: 'Rate limit exceeded',
+    it("should throw an error when rate limit is exceeded (403)", async () => {
+      const mockError = new RequestError("Rate limit exceeded", 403, {
+        data: "Rate limit exceeded",
       });
 
       const mockOctokit = {
@@ -105,14 +105,14 @@ describe('lib/github.ts', () => {
 
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
-      await expect(searchRepos('react', 1)).rejects.toThrow(
-        'APIの利用回数制限に達しました。しばらくしてから再度お試しください。'
+      await expect(searchRepos("react", 1)).rejects.toThrow(
+        "APIの利用回数制限に達しました。しばらくしてから再度お試しください。"
       );
     });
 
-    it('should throw an error when query is invalid (422)', async () => {
-      const mockError = new RequestError('Validation failed', 422, {
-        data: 'Validation failed',
+    it("should throw an error when query is invalid (422)", async () => {
+      const mockError = new RequestError("Validation failed", 422, {
+        data: "Validation failed",
       });
 
       const mockOctokit = {
@@ -125,14 +125,14 @@ describe('lib/github.ts', () => {
 
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
-      await expect(searchRepos('react', 1)).rejects.toThrow(
-        '検索クエリが無効です。検索条件を確認してください。'
+      await expect(searchRepos("react", 1)).rejects.toThrow(
+        "検索クエリが無効です。検索条件を確認してください。"
       );
     });
 
-    it('should throw an error on other failed requests (500)', async () => {
-      const mockError = new RequestError('Internal Server Error', 500, {
-        data: 'Internal Server Error',
+    it("should throw an error on other failed requests (500)", async () => {
+      const mockError = new RequestError("Internal Server Error", 500, {
+        data: "Internal Server Error",
       });
 
       const mockOctokit = {
@@ -145,18 +145,18 @@ describe('lib/github.ts', () => {
 
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
-      await expect(searchRepos('react', 1)).rejects.toThrow(
-        'データの取得に失敗しました。(Status: 500)'
+      await expect(searchRepos("react", 1)).rejects.toThrow(
+        "データの取得に失敗しました。(Status: 500)"
       );
     });
   });
 
-  describe('getRepo', () => {
+  describe("getRepo", () => {
     beforeEach(() => {
       jest.clearAllMocks();
     });
 
-    it('should return repository details on a successful request', async () => {
+    it("should return repository details on a successful request", async () => {
       const mockOctokit = {
         rest: {
           repos: {
@@ -167,18 +167,18 @@ describe('lib/github.ts', () => {
 
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
-      const result = await getRepo('facebook', 'react');
+      const result = await getRepo("facebook", "react");
 
       expect(result).toEqual(mockRepoDetails);
       expect(mockOctokit.rest.repos.get).toHaveBeenCalledWith({
-        owner: 'facebook',
-        repo: 'react',
+        owner: "facebook",
+        repo: "react",
       });
     });
 
-    it('should throw an error when rate limit is exceeded (403)', async () => {
-      const mockError = new RequestError('Rate limit exceeded', 403, {
-        data: 'Rate limit exceeded',
+    it("should throw an error when rate limit is exceeded (403)", async () => {
+      const mockError = new RequestError("Rate limit exceeded", 403, {
+        data: "Rate limit exceeded",
       });
 
       const mockOctokit = {
@@ -191,14 +191,14 @@ describe('lib/github.ts', () => {
 
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
-      await expect(getRepo('facebook', 'react')).rejects.toThrow(
-        'APIの利用回数制限に達しました。しばらくしてから再度お試しください。'
+      await expect(getRepo("facebook", "react")).rejects.toThrow(
+        "APIの利用回数制限に達しました。しばらくしてから再度お試しください。"
       );
     });
 
-    it('should throw an error when repository is not found (404)', async () => {
-      const mockError = new RequestError('Not Found', 404, {
-        data: 'Not Found',
+    it("should throw an error when repository is not found (404)", async () => {
+      const mockError = new RequestError("Not Found", 404, {
+        data: "Not Found",
       });
 
       const mockOctokit = {
@@ -211,14 +211,14 @@ describe('lib/github.ts', () => {
 
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
-      await expect(getRepo('facebook', 'react')).rejects.toThrow(
-        '指定されたリポジトリが見つかりませんでした。'
+      await expect(getRepo("facebook", "react")).rejects.toThrow(
+        "指定されたリポジトリが見つかりませんでした。"
       );
     });
 
-    it('should throw an error on other failed requests (500)', async () => {
-      const mockError = new RequestError('Internal Server Error', 500, {
-        data: 'Internal Server Error',
+    it("should throw an error on other failed requests (500)", async () => {
+      const mockError = new RequestError("Internal Server Error", 500, {
+        data: "Internal Server Error",
       });
 
       const mockOctokit = {
@@ -231,8 +231,8 @@ describe('lib/github.ts', () => {
 
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
-      await expect(getRepo('facebook', 'react')).rejects.toThrow(
-        'リポジトリ情報の取得に失敗しました。(Status: 500)'
+      await expect(getRepo("facebook", "react")).rejects.toThrow(
+        "リポジトリ情報の取得に失敗しました。(Status: 500)"
       );
     });
   });

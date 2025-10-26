@@ -6,6 +6,9 @@
 # Claude Code
 /.claude/
 
+# Biome
+/.biome-cache/
+
 # dependencies
 /node_modules
 /.pnp
