@@ -17,6 +17,7 @@ This project is a simple web application for searching GitHub repositories and v
 - **Tailwind CSS**: A utility-first CSS framework.
 - **shadcn/ui**: A collection of reusable UI components based on Radix UI and Tailwind CSS.
 - **Lucide React**: An icon library.
+- **Storybook**: A frontend workshop for building and documenting UI components in isolation.
 
 ## Development Setup
 
@@ -104,6 +105,38 @@ pnpm exec playwright install
 ```
 
 For more details, see [CLAUDE.md](CLAUDE.md).
+
+## Storybook
+
+This project uses Storybook for component development and documentation.
+
+### Running Storybook
+
+```bash
+# Start Storybook development server
+pnpm storybook
+```
+
+Access Storybook at `http://localhost:6006`.
+
+### Building Storybook
+
+```bash
+# Build static Storybook site
+pnpm build-storybook
+```
+
+### Available Stories
+
+- **UI Components**: Button, Input, Card, ErrorDisplay, Spinner
+- **Feature Components**: RepoStatCard, SearchForm
+
+Storybook provides:
+- Interactive component playground
+- Auto-generated documentation
+- Accessibility testing (a11y addon)
+- Visual testing capabilities
+- Component catalog for the design system
 
 ## Docker
 

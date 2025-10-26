@@ -22,6 +22,7 @@ GitHub リポジトリを検索し、詳細情報を表示するWebアプリケ�
 - **shadcn/ui**: 再利用可能なUIコンポーネント
 - **SWR**: データフェッチングとキャッシング
 - **Octokit**: GitHub API クライアント
+- **Storybook**: コンポーネント開発・ドキュメント化ツール
 
 ## 開発環境のセットアップ
 
@@ -100,6 +101,45 @@ pnpm test:e2e:debug
 
 - ユニットテスト: `__tests__/**/*.test.ts(x)`
 - E2Eテスト: `e2e/**/*.spec.ts`
+
+## Storybook
+
+### Storybookの起動
+
+```bash
+# Storybookの開発サーバーを起動
+pnpm storybook
+```
+
+`http://localhost:6006` でStorybookにアクセスできます。
+
+### Storybookのビルド
+
+```bash
+# 静的サイトとしてビルド
+pnpm build-storybook
+```
+
+### 利用可能なストーリー
+
+#### UIコンポーネント
+- **Button**: 全バリアント（Default, Secondary, Destructive, Outline, Ghost, Link）とサイズ
+- **Input**: 各入力タイプ（text, email, password, search, number）
+- **Card**: レイアウトバリエーション（Header, Content, Footer）
+- **ErrorDisplay**: エラータイプ別（404, Rate Limit, Network, Validation）
+- **Spinner**: サイズ・カラーバリエーション
+
+#### Featureコンポーネント
+- **RepoStatCard**: リポジトリ統計カード（Stars, Watchers, Forks, Issues）
+- **SearchForm**: 検索フォーム
+
+### Storybookの活用方法
+
+1. **コンポーネント開発**: アプリケーションから独立した環境でUIコンポーネントを開発
+2. **ドキュメント**: Props、使用例、バリエーションが自動生成
+3. **ビジュアルテスト**: UIの変更を視覚的に確認
+4. **アクセシビリティ**: a11yアドオンで自動チェック
+5. **デザインシステム**: コンポーネントカタログとして活用
 
 ## 初回セットアップ
 
@@ -193,9 +233,13 @@ try {
 GitHubRepoSearchApp/
 ├── app/                 # Next.js App Router（ページとレイアウト）
 ├── components/          # UIコンポーネント（shadcn/ui含む）
+│   ├── ui/             # 基本UIコンポーネント + *.stories.tsx
+│   └── features/       # 機能コンポーネント + *.stories.tsx
 ├── lib/                 # API通信、型定義、ユーティリティ
 ├── __tests__/           # ユニットテスト（Jest）
 ├── e2e/                 # E2Eテスト（Playwright）
+├── .storybook/          # Storybook設定
+├── stories/             # Storybookサンプルストーリー
 └── 各種設定ファイル      # jest.config.ts, playwright.config.ts など
 ```
 
@@ -229,10 +273,49 @@ GitHubRepoSearchApp/
 pnpx shadcn-ui@latest add [component-name]
 ```
 
+新しいコンポーネントを追加したら、Storybookストーリーも作成することを推奨:
+
+```bash
+# 例: components/ui/new-component.stories.tsx
+```
+
 ### スタイルのカスタマイズ
 
 - `tailwind.config.ts` でTailwind CSSの設定を変更
 - `app/globals.css` でグローバルスタイルを調整
+
+### Storybookストーリーの作成
+
+新しいコンポーネントのストーリーを作成する手順:
+
+1. `components/ui/` または `components/features/` にコンポーネントを作成
+2. 同じディレクトリに `[component-name].stories.tsx` を作成
+3. 以下のテンプレートを使用:
+
+```typescript
+import type { Meta, StoryObj } from "@storybook/react";
+import { YourComponent } from "./your-component";
+
+const meta = {
+  title: "UI/YourComponent", // または "Features/YourComponent"
+  component: YourComponent,
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["autodocs"],
+} satisfies Meta<typeof YourComponent>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    // props
+  },
+};
+```
+
+4. Storybookで確認: `pnpm storybook`
 
 ## トラブルシューティング
 
@@ -275,6 +358,7 @@ pnpm exec playwright install --force
 - [Jest Documentation](https://jestjs.io/docs/getting-started)
 - [Playwright Documentation](https://playwright.dev/docs/intro)
 - [GitHub API Documentation](https://docs.github.com/en/rest)
+- [Storybook Documentation](https://storybook.js.org/docs)
 
 ## その他のドキュメント
 
