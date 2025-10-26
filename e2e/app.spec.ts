@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { mockAllAPIs } from "./helpers/mock-api";
 
 // ヘルパー関数: 検索を実行してAPIレスポンスを待つ
 async function searchAndWaitForResults(page: Page, query: string) {
@@ -18,6 +19,9 @@ async function searchAndWaitForResults(page: Page, query: string) {
 
 test.describe("GitHubリポジトリ検索アプリケーションのE2Eテスト", () => {
   test.beforeEach(async ({ page }) => {
+    // APIをモック化（テストの安定性を向上）
+    await mockAllAPIs(page);
+
     // 各テストの前にトップページにアクセスする
     await page.goto("/");
   });
@@ -30,19 +34,19 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
 
     // 2. 検索結果が表示されることを確認する
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // 3. リポジトリカードが表示されるのを待つ
     await expect(page.locator('a[href^="/repos/"]').first()).toBeVisible({
-      timeout: 10000,
+      timeout: 5000,
     });
 
     // 4. 検索結果の最初の項目をクリックして詳細ページに遷移する
     await page.locator('a[href^="/repos/"]').first().click();
 
     // 5. 詳細ページに正しく遷移したことを確認する
-    await expect(page).toHaveURL(/\/repos\//, { timeout: 15000 });
+    await expect(page).toHaveURL(/\/repos\//, { timeout: 5000 });
     await expect(page.locator("h1")).toBeVisible();
 
     // 6. 「トップページに戻る」リンクでトップページに戻れることを確認する
@@ -61,7 +65,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 「...に一致するリポジトリが見つかりませんでした。」というメッセージが表示されることを確認
     await expect(
       page.getByText(/に一致するリポジトリが見つかりませんでした/)
-    ).toBeVisible({ timeout: 20000 });
+    ).toBeVisible({ timeout: 5000 });
   });
 
   test("存在しないリポジトリ詳細ページに移動した場合にエラーメッセージが表示されること", async ({
@@ -81,7 +85,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 検索を実行
     await searchAndWaitForResults(page, searchQuery);
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // ページネーションの "Next" ボタンをクリック
@@ -90,11 +94,11 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     await nextButton.click();
 
     // URLに "page=2" が含まれていることを確認
-    await expect(page).toHaveURL(/page=2/, { timeout: 10000 });
+    await expect(page).toHaveURL(/page=2/, { timeout: 5000 });
 
     // 検索結果が再表示されるまで待機
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // ページネーションの "Previous" ボタンをクリック
@@ -103,11 +107,11 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     await prevButton.click();
 
     // URLに "page=1" が含まれていることを確認
-    await expect(page).toHaveURL(/page=1/, { timeout: 10000 });
+    await expect(page).toHaveURL(/page=1/, { timeout: 5000 });
 
     // 検索結果が再表示されるまで待機
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
   });
 
@@ -132,12 +136,12 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 検索を実行
     await searchAndWaitForResults(page, searchQuery);
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // 最初のリポジトリの詳細ページに遷移
     await page.locator('a[href^="/repos/"]').first().click();
-    await expect(page).toHaveURL(/\/repos\//, { timeout: 15000 });
+    await expect(page).toHaveURL(/\/repos\//, { timeout: 5000 });
 
     // オーナー情報が表示されることを確認
     await expect(page.locator("text=Owner:")).toBeVisible();
@@ -160,7 +164,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
 
     await searchAndWaitForResults(page, popularQuery);
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // 検索結果数を確認
@@ -191,7 +195,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
 
     // 検索結果が表示されることを確認
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // 検索フォームに初期クエリが表示されていることを確認
@@ -207,7 +211,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 最初の検索
     await searchAndWaitForResults(page, searchQuery);
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     const currentURL = page.url();
@@ -249,7 +253,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
 
     // 検索結果が表示されることを確認
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // URLにpage=3が含まれていることを確認
@@ -263,7 +267,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
 
     // 検索結果が表示されることを確認
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // URLにクエリが含まれていることを確認
@@ -281,7 +285,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     const resultOrError = page
       .getByText(/検索結果:\s*[\d,]+件/)
       .or(page.getByText(/に一致するリポジトリが見つかりませんでした/));
-    await expect(resultOrError).toBeVisible({ timeout: 20000 });
+    await expect(resultOrError).toBeVisible({ timeout: 5000 });
   });
 
   test("リポジトリ詳細ページから別のリポジトリに遷移できること", async ({
@@ -292,12 +296,12 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 検索を実行
     await searchAndWaitForResults(page, searchQuery);
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // 最初のリポジトリの詳細ページに遷移
     await page.locator('a[href^="/repos/"]').first().click();
-    await expect(page).toHaveURL(/\/repos\//, { timeout: 15000 });
+    await expect(page).toHaveURL(/\/repos\//, { timeout: 5000 });
 
     // トップページに戻る（検索状態はリセットされる）
     const backLink = page.getByRole("link", { name: "トップページに戻る" });
@@ -308,12 +312,12 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 再度検索を実行
     await searchAndWaitForResults(page, searchQuery);
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // 2番目のリポジトリの詳細ページに遷移
     await page.locator('a[href^="/repos/"]').nth(1).click();
-    await expect(page).toHaveURL(/\/repos\//, { timeout: 10000 });
+    await expect(page).toHaveURL(/\/repos\//, { timeout: 5000 });
   });
 
   test("検索結果が0件の場合に適切なメッセージが表示されること", async ({
@@ -326,7 +330,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 「...に一致するリポジトリが見つかりませんでした。」というメッセージが表示されることを確認
     await expect(
       page.getByText(/に一致するリポジトリが見つかりませんでした/)
-    ).toBeVisible({ timeout: 20000 });
+    ).toBeVisible({ timeout: 5000 });
 
     // ページネーションが表示されないことを確認
     await expect(
@@ -342,21 +346,21 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     // 検索を実行
     await searchAndWaitForResults(page, searchQuery);
     await expect(page.getByText(/検索結果:\s*[\d,]+件/)).toBeVisible({
-      timeout: 20000,
+      timeout: 5000,
     });
 
     // 2ページ目に移動
     const nextButton = page.getByRole("link", { name: "Go to next page" });
     await expect(nextButton).toBeVisible({ timeout: 5000 });
     await nextButton.click();
-    await expect(page).toHaveURL(/page=2/, { timeout: 10000 });
+    await expect(page).toHaveURL(/page=2/, { timeout: 5000 });
 
     // URLを保存
     const searchResultURL = page.url();
 
     // リポジトリの詳細ページに遷移
     await page.locator('a[href^="/repos/"]').first().click();
-    await expect(page).toHaveURL(/\/repos\//, { timeout: 15000 });
+    await expect(page).toHaveURL(/\/repos\//, { timeout: 5000 });
 
     // ブラウザの戻るボタンで検索結果に戻る
     await page.goBack();
