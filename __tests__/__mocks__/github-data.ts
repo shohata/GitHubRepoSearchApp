@@ -3,7 +3,7 @@ import type { GitHubRepo, GitHubSearchRepos } from "@/lib/types";
 /**
  * テスト用のモックリポジトリデータ（React）
  */
-const mockReactRepo: GitHubRepo = {
+const mockReactRepo = {
   id: 10270250,
   full_name: "facebook/react",
   name: "react",
@@ -21,12 +21,12 @@ const mockReactRepo: GitHubRepo = {
   subscribers_count: 7000,
   created_at: "2013-05-24T16:15:54Z",
   updated_at: "2024-01-01T00:00:00Z",
-};
+} as GitHubRepo;
 
 /**
  * テスト用のモックリポジトリデータ（Vue）
  */
-const mockVueRepo: GitHubRepo = {
+const mockVueRepo = {
   id: 11730342,
   full_name: "vuejs/vue",
   name: "vue",
@@ -44,15 +44,15 @@ const mockVueRepo: GitHubRepo = {
   subscribers_count: 5000,
   created_at: "2013-07-29T03:24:51Z",
   updated_at: "2024-01-01T00:00:00Z",
-};
+} as GitHubRepo;
 
 /**
  * 複数のリポジトリを含むモックデータ
  */
-export const mockMultipleRepos: GitHubSearchRepos = [
+export const mockMultipleRepos = [
   mockReactRepo,
   mockVueRepo,
-];
+] as unknown as GitHubSearchRepos;
 
 /**
  * GitHub Search API のレスポンス形式（複数リポジトリ）
