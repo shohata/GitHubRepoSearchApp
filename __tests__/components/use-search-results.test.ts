@@ -198,4 +198,103 @@ describe("useSearchResults", () => {
       expect.any(Object)
     );
   });
+
+  it("ページ番号が文字列として渡された場合、数値に変換する", () => {
+    mockGet.mockImplementation((key: string) => {
+      if (key === "q") return "test";
+      if (key === "page") return "3";
+      return null;
+    });
+
+    (useSWR as jest.Mock).mockReturnValue({
+      data: { items: [], total_count: 100 },
+      error: undefined,
+      isLoading: false,
+    });
+
+    const { result } = renderHook(() => useSearchResults());
+
+    expect(result.current.page).toBe(3);
+    expect(typeof result.current.page).toBe("number");
+  });
+
+  it("ページ番号が不正な場合、1にフォールバックする", () => {
+    mockGet.mockImplementation((key: string) => {
+      if (key === "q") return "test";
+      if (key === "page") return null;
+      return null;
+    });
+
+    (useSWR as jest.Mock).mockReturnValue({
+      data: { items: [], total_count: 100 },
+      error: undefined,
+      isLoading: false,
+    });
+
+    const { result } = renderHook(() => useSearchResults());
+
+    expect(result.current.page).toBe(1);
+  });
+
+  it("totalCountが0の場合、totalPageも0になる", () => {
+    mockGet.mockImplementation((key: string) => {
+      if (key === "q") return "test";
+      return null;
+    });
+
+    (useSWR as jest.Mock).mockReturnValue({
+      data: { items: [], total_count: 0 },
+      error: undefined,
+      isLoading: false,
+    });
+
+    const { result } = renderHook(() => useSearchResults());
+
+    expect(result.current.totalCount).toBe(0);
+    expect(result.current.totalPage).toBe(0);
+  });
+
+  it("エラーオブジェクトにメッセージが含まれる", () => {
+    mockGet.mockImplementation((key: string) => {
+      if (key === "q") return "error-query";
+      return null;
+    });
+
+    const mockError = new Error("API rate limit exceeded");
+
+    (useSWR as jest.Mock).mockReturnValue({
+      data: undefined,
+      error: mockError,
+      isLoading: false,
+    });
+
+    const { result } = renderHook(() => useSearchResults());
+
+    expect(result.current.error).toBe(mockError);
+    expect(result.current.error?.message).toBe("API rate limit exceeded");
+  });
+
+  it("SWRのオプションが正しく設定される", () => {
+    mockGet.mockImplementation((key: string) => {
+      if (key === "q") return "test";
+      return null;
+    });
+
+    (useSWR as jest.Mock).mockReturnValue({
+      data: undefined,
+      error: undefined,
+      isLoading: false,
+    });
+
+    renderHook(() => useSearchResults());
+
+    expect(useSWR).toHaveBeenCalledWith(
+      "/api/search?q=test&page=1",
+      expect.any(Function),
+      {
+        revalidateOnFocus: false,
+        dedupingInterval: 5000,
+      }
+    );
+  });
 });
