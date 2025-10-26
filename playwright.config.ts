@@ -1,35 +1,36 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Read environment variables from file.
+ * ファイルから環境変数を読み込む
  * https://github.com/motdotla/dotenv
  */
 // require('dotenv').config();
 
 /**
- * See https://playwright.dev/docs/test-configuration.
+ * Playwrightのテスト設定
+ * https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
   testDir: "./e2e",
-  /* Run tests in files in parallel */
+  /* ファイル内のテストを並列実行 */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  /* CI環境でtest.onlyが残っている場合はビルドを失敗させる */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
+  /* CI環境でのみリトライを有効化 */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
+  /* CI環境では並列テストを無効化 */
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  /* 使用するレポーター形式。詳細: https://playwright.dev/docs/test-reporters */
   reporter: "html",
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  /* 全プロジェクト共通の設定。詳細: https://playwright.dev/docs/api/class-testoptions */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
+    /* `await page.goto('/')`などのアクションで使用するベースURL */
     baseURL: "http://localhost:3000",
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    /* テスト失敗時にトレースを収集。詳細: https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
   },
 
-  /* Configure projects for major browsers */
+  /* 主要ブラウザ向けのプロジェクト設定 */
   projects: [
     {
       name: "chromium",
@@ -46,7 +47,7 @@ export default defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
 
-    /* Test against mobile viewports. */
+    /* モバイルビューポートに対するテスト */
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
@@ -56,7 +57,7 @@ export default defineConfig({
     //   use: { ...devices['iPhone 12'] },
     // },
 
-    /* Test against branded browsers. */
+    /* ブランドブラウザに対するテスト */
     // {
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
@@ -67,7 +68,7 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
+  /* テスト開始前にローカル開発サーバーを起動 */
   webServer: {
     command: "pnpm dev",
     url: "http://localhost:3000",

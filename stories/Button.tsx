@@ -1,19 +1,19 @@
 import "./button.css";
 
 export interface ButtonProps {
-  /** Is this the principal call to action on the page? */
+  /** ページの主要なコールトゥアクションですか？ */
   primary?: boolean;
-  /** What background color to use */
+  /** 使用する背景色 */
   backgroundColor?: string;
-  /** How large should the button be? */
+  /** ボタンのサイズはどれくらいですか？ */
   size?: "small" | "medium" | "large";
-  /** Button contents */
+  /** ボタンの内容 */
   label: string;
-  /** Optional click handler */
+  /** オプションのクリックハンドラー */
   onClick?: () => void;
 }
 
-/** Primary UI component for user interaction */
+/** ユーザーインタラクションのためのプライマリUIコンポーネント */
 export const Button = ({
   primary = false,
   size = "medium",

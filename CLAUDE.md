@@ -147,6 +147,7 @@ pnpm exec playwright install
 5. **品質チェック（必須）**:
    - `pnpm format` でコードフォーマット
    - `pnpm lint` でコード品質を確認
+   - `pnpm test` でテストを実行
    - `pnpm build` で本番ビルドが成功することを確認
    - **全てのエラーを解消してから次へ進む**
 6. **コミット**: 変更をコミット
@@ -162,7 +163,10 @@ pnpm format
 # 2. Lintチェックを実行
 pnpm lint
 
-# 3. 本番ビルドを実行
+# 3. テストを実行
+pnpm test
+
+# 4. 本番ビルドを実行
 pnpm build
 ```
 
