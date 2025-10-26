@@ -120,19 +120,6 @@ pnpm storybook
 pnpm build-storybook
 ```
 
-### 利用可能なストーリー
-
-#### UIコンポーネント
-- **Button**: 全バリアント（Default, Secondary, Destructive, Outline, Ghost, Link）とサイズ
-- **Input**: 各入力タイプ（text, email, password, search, number）
-- **Card**: レイアウトバリエーション（Header, Content, Footer）
-- **ErrorDisplay**: エラータイプ別（404, Rate Limit, Network, Validation）
-- **Spinner**: サイズ・カラーバリエーション
-
-#### Featureコンポーネント
-- **RepoStatCard**: リポジトリ統計カード（Stars, Watchers, Forks, Issues）
-- **SearchForm**: 検索フォーム
-
 ### Storybookの活用方法
 
 1. **コンポーネント開発**: アプリケーションから独立した環境でUIコンポーネントを開発
