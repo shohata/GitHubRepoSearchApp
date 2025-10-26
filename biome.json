@@ -56,14 +56,8 @@
         "noShadowRestrictedNames": "off"
       },
       "a11y": {
-        "useValidAnchor": "warn",
-        "useKeyWithClickEvents": "warn",
         "useSemanticElements": "warn",
-        "useAltText": "warn",
         "useAriaPropsSupportedByRole": "warn"
-      },
-      "performance": {
-        "noImgElement": "warn"
       }
     }
   },
