@@ -1,11 +1,11 @@
-import { type Page, expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 // ヘルパー関数: 検索を実行してAPIレスポンスを待つ
 async function searchAndWaitForResults(page: Page, query: string) {
   await page.fill("input#search-input", query);
 
   // ボタンをクリックして検索を実行
-  await page.getByRole('button', { name: 'Search' }).click();
+  await page.getByRole("button", { name: "Search" }).click();
 
   // URLが更新されるまで待機（検索が実行されたことを確認）
   await page.waitForURL(`**/?q=${encodeURIComponent(query)}*`, {
@@ -13,7 +13,7 @@ async function searchAndWaitForResults(page: Page, query: string) {
   });
 
   // DOMの読み込みが完了するまで待機
-  await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+  await page.waitForLoadState("domcontentloaded", { timeout: 10000 });
 }
 
 test.describe("GitHubリポジトリ検索アプリケーションのE2Eテスト", () => {
@@ -117,7 +117,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     await expect(input).toHaveAttribute("required");
 
     // 検索ボタンをクリック
-    await page.getByRole('button', { name: 'Search' }).click();
+    await page.getByRole("button", { name: "Search" }).click();
 
     // 検索が実行されていないことを確認
     await expect(page).not.toHaveURL(/q=/);
@@ -213,7 +213,7 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
     const currentURL = page.url();
 
     // 同じクエリで再度検索
-    await page.getByRole('button', { name: 'Search' }).click();
+    await page.getByRole("button", { name: "Search" }).click();
 
     // ネットワークがアイドル状態になるまで待機
     await page.waitForLoadState("networkidle");
@@ -232,9 +232,9 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
 
     // ドロップダウンメニューが表示されることを確認
     await expect(
-      page.getByRole("menuitem", { name: "Light" }).or(
-        page.getByRole("menuitem", { name: "Dark" })
-      )
+      page
+        .getByRole("menuitem", { name: "Light" })
+        .or(page.getByRole("menuitem", { name: "Dark" }))
     ).toBeVisible({ timeout: 5000 });
   });
 
