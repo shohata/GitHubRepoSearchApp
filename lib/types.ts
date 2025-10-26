@@ -1,27 +1,59 @@
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
+import type { LucideIcon } from "lucide-react";
 
-// GitHub API で取得したリポジトリの情報
-type GitHubRepo = RestEndpointMethodTypes["repos"]["get"]["response"]["data"];
+/**
+ * GitHub API で取得したリポジトリの詳細情報
+ */
+export type GitHubRepo =
+  RestEndpointMethodTypes["repos"]["get"]["response"]["data"];
 
-// GitHub API で検索したレポジトリの一覧
-type GitHubSearchRepoResult =
+/**
+ * GitHub API で検索したリポジトリの検索結果
+ */
+export type GitHubSearchRepoResult =
   RestEndpointMethodTypes["search"]["repos"]["response"]["data"];
-type GitHubSearchRepos = GitHubSearchRepoResult["items"];
 
-type SearchParams = {
+/**
+ * GitHub API で検索したリポジトリのアイテムリスト
+ */
+export type GitHubSearchRepos = GitHubSearchRepoResult["items"];
+
+/**
+ * 検索ページのURLパラメータ
+ */
+export type SearchParams = {
   q?: string;
   page?: string;
 };
 
-type RepoParams = {
+/**
+ * リポジトリ詳細ページのパスパラメータ
+ */
+export type RepoParams = {
   owner: string;
   repo: string;
 };
 
-export type {
-  GitHubRepo,
-  GitHubSearchRepoResult,
-  GitHubSearchRepos,
-  SearchParams,
-  RepoParams,
+/**
+ * ページネーションアイテムの型定義
+ */
+export type PaginationItem =
+  | { type: "page"; pageNumber: number; isActive?: boolean }
+  | { type: "ellipsis"; id: string };
+
+/**
+ * リポジトリ統計カードのプロパティ
+ */
+export type RepoStatCardProps = {
+  icon: LucideIcon;
+  label: string;
+  value: number;
+};
+
+/**
+ * エラー表示コンポーネントのプロパティ
+ */
+export type ErrorDisplayProps = {
+  message: string;
+  title?: string;
 };

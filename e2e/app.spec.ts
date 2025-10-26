@@ -148,7 +148,10 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
       .textContent();
 
     // 結果が1000件を超える場合、警告メッセージが表示される
-    if (resultText && Number.parseInt(resultText.match(/\d+/)?.[0] || "0") > 1000) {
+    if (
+      resultText &&
+      Number.parseInt(resultText.match(/\d+/)?.[0] || "0") > 1000
+    ) {
       await expect(
         page.locator(
           "text=検索結果が多数あります。APIの仕様により、最初の1000件のみ表示しています。"
@@ -199,11 +202,10 @@ test.describe("GitHubリポジトリ検索アプリケーションのE2Eテス�
 
   test("ダークモード切り替えが動作すること", async ({ page }) => {
     // ダークモード切り替えボタンを探す
-    const themeToggle = page.locator('button[aria-label*="Toggle theme"]').or(
-      page.locator('button:has-text("Toggle theme")')
-    ).or(
-      page.getByRole('button', { name: /theme/i })
-    );
+    const themeToggle = page
+      .locator('button[aria-label*="Toggle theme"]')
+      .or(page.locator('button:has-text("Toggle theme")'))
+      .or(page.getByRole("button", { name: /theme/i }));
 
     // ボタンが存在する場合のみテスト
     if ((await themeToggle.count()) > 0) {

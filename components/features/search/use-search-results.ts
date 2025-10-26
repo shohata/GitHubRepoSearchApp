@@ -1,15 +1,21 @@
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import useSWR from "swr";
-import { ITEMS_PER_PAGE } from "@/lib/config";
-import type { GitHubSearchRepoResult } from "@/lib/types";
+import {
+  ITEMS_PER_PAGE,
+  MAX_PAGINATION_PAGES,
+  MAX_SEARCH_RESULTS,
+} from "@/lib/config";
+import type { GitHubSearchRepoResult, PaginationItem } from "@/lib/types";
 
-// ページネーションアイテムの型定義
-export type PaginationItem =
-  | { type: "page"; pageNumber: number; isActive?: boolean }
-  | { type: "ellipsis"; id: string };
-
-// JSONを返すシンプルなfetcher関数
+/**
+ * JSONを返すシンプルなfetcher関数
+ * SWRで使用するデータフェッチング関数
+ *
+ * @param url - フェッチするURL
+ * @returns {Promise<any>} JSONレスポンス
+ * @throws {Error} フェッチに失敗した場合
+ */
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
     if (!res.ok) {
@@ -18,7 +24,11 @@ const fetcher = (url: string) =>
     return res.json();
   });
 
-// 検索結果とページネーションのロジックを扱うカスタムフック
+/**
+ * 検索結果とページネーションのロジックを扱うカスタムフック
+ *
+ * @returns 検索状態とページネーション情報
+ */
 export function useSearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") ?? "";
@@ -28,15 +38,22 @@ export function useSearchResults() {
   const apiUrl = query ? `/api/search?q=${query}&page=${page}` : null;
   const { data, error, isLoading } = useSWR<GitHubSearchRepoResult>(
     apiUrl,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false, // フォーカス時の再検証を無効化
+      dedupingInterval: 5000, // 5秒間のキャッシュ
+    }
   );
 
   // 取得したデータから必要な値を抽出
   const repos = data?.items ?? [];
   const totalCount = data?.total_count ?? 0;
 
-  // 最初の1000件だけ取得可能なため制限
-  const totalItems = useMemo(() => Math.min(totalCount, 1000), [totalCount]);
+  // GitHub API の仕様により、最初の1000件だけ取得可能
+  const totalItems = useMemo(
+    () => Math.min(totalCount, MAX_SEARCH_RESULTS),
+    [totalCount]
+  );
 
   // 総ページ数を計算
   const totalPage = useMemo(
@@ -47,13 +64,12 @@ export function useSearchResults() {
   // ページネーションの表示ロジック
   const pagination = useMemo(() => {
     const items: PaginationItem[] = [];
-    const maxPagesToShow = 5; // 表示する最大ページ数
-    let startPage = Math.max(1, page - Math.floor(maxPagesToShow / 2));
-    const endPage = Math.min(totalPage, startPage + maxPagesToShow - 1);
+    let startPage = Math.max(1, page - Math.floor(MAX_PAGINATION_PAGES / 2));
+    const endPage = Math.min(totalPage, startPage + MAX_PAGINATION_PAGES - 1);
 
     // 表示ページ数が最大表示数に満たない場合、開始ページを調整
-    if (endPage - startPage + 1 < maxPagesToShow) {
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    if (endPage - startPage + 1 < MAX_PAGINATION_PAGES) {
+      startPage = Math.max(1, endPage - MAX_PAGINATION_PAGES + 1);
     }
 
     // 最初のページと省略記号(...)を追加

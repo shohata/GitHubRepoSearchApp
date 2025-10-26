@@ -1,4 +1,5 @@
 import { getRepo, searchRepos } from "@/lib/github";
+import { resetOctokitClient } from "@/lib/octokit-client";
 
 // Mock the entire octokit module
 jest.mock("octokit", () => {
@@ -67,6 +68,7 @@ describe("lib/github.ts", () => {
   describe("searchRepos", () => {
     beforeEach(() => {
       jest.clearAllMocks();
+      resetOctokitClient();
     });
 
     it("should return search results on a successful request", async () => {
@@ -146,7 +148,7 @@ describe("lib/github.ts", () => {
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
       await expect(searchRepos("react", 1)).rejects.toThrow(
-        "データの取得に失敗しました。(Status: 500)"
+        /データの取得に失敗しました。.*Status: 500/
       );
     });
   });
@@ -154,6 +156,7 @@ describe("lib/github.ts", () => {
   describe("getRepo", () => {
     beforeEach(() => {
       jest.clearAllMocks();
+      resetOctokitClient();
     });
 
     it("should return repository details on a successful request", async () => {
@@ -232,7 +235,7 @@ describe("lib/github.ts", () => {
       (Octokit as jest.Mock).mockImplementation(() => mockOctokit);
 
       await expect(getRepo("facebook", "react")).rejects.toThrow(
-        "リポジトリ情報の取得に失敗しました。(Status: 500)"
+        /リポジトリ情報の取得に失敗しました。.*Status: 500/
       );
     });
   });

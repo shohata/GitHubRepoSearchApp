@@ -1,74 +1,48 @@
-import { Octokit, RequestError } from "octokit";
 import type { GitHubRepo, GitHubSearchRepoResult } from "@/lib/types";
 import { ITEMS_PER_PAGE } from "./config";
+import { handleGitHubError } from "./errors";
+import { getOctokitClient } from "./octokit-client";
 
-const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN;
-
-// GitHub API をサーバコンポーネントで呼び出しレポジトリ情報を取得
+/**
+ * GitHub API を呼び出してリポジトリ情報を取得
+ *
+ * @param owner - リポジトリのオーナー名
+ * @param repo - リポジトリ名
+ * @returns {Promise<GitHubRepo>} リポジトリの詳細情報
+ * @throws {GitHubAPIError} API呼び出しに失敗した場合
+ */
 async function getRepo(owner: string, repo: string): Promise<GitHubRepo> {
   try {
-    const octokit = GITHUB_ACCESS_TOKEN
-      ? new Octokit({ auth: GITHUB_ACCESS_TOKEN })
-      : new Octokit();
-    const res = await octokit.rest.repos.get({ owner: owner, repo: repo });
+    const octokit = getOctokitClient();
+    const res = await octokit.rest.repos.get({ owner, repo });
     return res.data;
   } catch (error) {
-    if (error instanceof RequestError) {
-      if (error.status === 403) {
-        console.error("GitHub API rate limit exceeded.", error.response);
-        throw new Error(
-          "APIの利用回数制限に達しました。しばらくしてから再度お試しください。"
-        );
-      }
-      if (error.status === 404) {
-        console.error("Repository not found.", error.response);
-        throw new Error("指定されたリポジトリが見つかりませんでした。");
-      }
-      console.error(`GitHub API Error: ${error.status}`, error.response);
-      throw new Error(
-        `リポジトリ情報の取得に失敗しました。(Status: ${error.status})`
-      );
-    }
-    // Handle unexpected errors
-    console.error("An unexpected error occurred:", error);
-    throw new Error("予期せぬエラーが発生しました。");
+    handleGitHubError(error, "repo");
   }
 }
 
-// GitHub API をサーバーコンポーネントで呼び出し検索結果を取得
+/**
+ * GitHub API を呼び出してリポジトリを検索
+ *
+ * @param query - 検索クエリ
+ * @param page - ページ番号 (1始まり)
+ * @returns {Promise<GitHubSearchRepoResult>} 検索結果
+ * @throws {GitHubAPIError} API呼び出しに失敗した場合
+ */
 async function searchRepos(
   query: string,
   page: number
 ): Promise<GitHubSearchRepoResult> {
   try {
-    const octokit = GITHUB_ACCESS_TOKEN
-      ? new Octokit({ auth: GITHUB_ACCESS_TOKEN })
-      : new Octokit();
+    const octokit = getOctokitClient();
     const res = await octokit.rest.search.repos({
       q: query,
-      page: page,
+      page,
       per_page: ITEMS_PER_PAGE,
     });
     return res.data;
   } catch (error) {
-    if (error instanceof RequestError) {
-      // Handle specific API errors
-      if (error.status === 403) {
-        console.error("GitHub API rate limit exceeded.", error.response);
-        throw new Error(
-          "APIの利用回数制限に達しました。しばらくしてから再度お試しください。"
-        );
-      }
-      if (error.status === 422) {
-        console.error("Validation failed.", error.response);
-        throw new Error("検索クエリが無効です。検索条件を確認してください。");
-      }
-      console.error(`GitHub API Error: ${error.status}`, error.response);
-      throw new Error(`データの取得に失敗しました。(Status: ${error.status})`);
-    }
-    // Handle unexpected errors
-    console.error("An unexpected error occurred:", error);
-    throw new Error("予期せぬエラーが発生しました。");
+    handleGitHubError(error, "search");
   }
 }
 

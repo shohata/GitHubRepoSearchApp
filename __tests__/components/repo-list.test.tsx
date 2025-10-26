@@ -5,14 +5,26 @@ import type { GitHubSearchRepos } from "@/lib/types";
 // Next.jsのImageとLinkをモック
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: { src: string; alt: string; width: number; height: number; className: string }) => {
+  default: (props: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    className: string;
+  }) => {
     return <img {...props} />;
   },
 }));
 
 jest.mock("next/link", () => ({
   __esModule: true,
-  default: ({ children, href }: { children: React.ReactNode; href: string }) => {
+  default: ({
+    children,
+    href,
+  }: {
+    children: React.ReactNode;
+    href: string;
+  }) => {
     return <a href={href}>{children}</a>;
   },
 }));
@@ -89,13 +101,13 @@ describe("RepoList", () => {
   test("オーナーのアバター画像が表示される", () => {
     render(<RepoList repos={mockRepos} />);
 
-    const facebookAvatar = screen.getByAltText("facebook");
+    const facebookAvatar = screen.getByAltText("facebookのアバター");
     expect(facebookAvatar).toHaveAttribute(
       "src",
       "https://example.com/avatar1.png"
     );
 
-    const vuejsAvatar = screen.getByAltText("vuejs");
+    const vuejsAvatar = screen.getByAltText("vuejsのアバター");
     expect(vuejsAvatar).toHaveAttribute(
       "src",
       "https://example.com/avatar2.png"

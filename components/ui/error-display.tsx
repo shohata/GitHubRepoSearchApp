@@ -8,21 +8,46 @@ type ErrorDisplayProps = {
   reload?: () => void;
 };
 
+/**
+ * エラー情報を表示するコンポーネント
+ * ユーザーフレンドリーなエラーメッセージと再試行オプションを提供
+ *
+ * @param title - エラーのタイトル
+ * @param message - エラーの詳細メッセージ
+ * @param reload - 再試行時のコールバック関数
+ */
 export function ErrorDisplay({
   title = "エラーが発生しました。",
   message,
   reload = () => window.location.reload(),
 }: ErrorDisplayProps) {
   return (
-    <div className="flex flex-col items-center justify-center text-center p-8 border-2 border-dashed rounded-lg">
-      <AlertTriangle className="w-12 h-12 text-destructive mb-4" />
-      <h3 className="text-xl font-semibold text-destructive">{title}</h3>
-      <p className="text-muted-foreground mt-2">{message}</p>
-      <div className="flex gap-4 mt-2">
-        <Button onClick={reload}>再試行</Button>
+    <div
+      className="flex flex-col items-center justify-center text-center p-8 border-2 border-dashed rounded-lg"
+      role="alert"
+      aria-live="assertive"
+    >
+      <AlertTriangle
+        className="w-12 h-12 text-destructive mb-4"
+        aria-hidden="true"
+      />
+      <h3 className="text-xl font-semibold text-destructive" id="error-title">
+        {title}
+      </h3>
+      <p className="text-muted-foreground mt-2" id="error-message">
+        {message}
+      </p>
+      <div
+        className="flex gap-4 mt-4"
+        role="group"
+        aria-labelledby="error-title"
+      >
+        <Button onClick={reload} aria-label="ページを再読み込み">
+          再試行
+        </Button>
         <Button variant="secondary" asChild>
-          <Link href="/" className="flex center">
-            <ArrowLeft className="mr-2 h-4 w-4" />
+          <Link href="/" className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
             トップページに戻る
           </Link>
         </Button>

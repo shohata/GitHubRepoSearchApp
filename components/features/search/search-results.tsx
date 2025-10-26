@@ -36,7 +36,11 @@ export function SearchResults() {
   // 検索クエリがない場合
   if (!query) {
     return (
-      <div className="text-center text-muted-foreground mt-16">
+      <div
+        className="text-center text-muted-foreground mt-16"
+        role="status"
+        aria-live="polite"
+      >
         <p>リポジトリを検索して、結果をここに表示します。</p>
       </div>
     );
@@ -45,8 +49,13 @@ export function SearchResults() {
   // データ取得中の表示
   if (isLoading) {
     return (
-      <div className="flex justify-center mt-8">
+      <div
+        className="flex justify-center mt-8"
+        role="status"
+        aria-live="polite"
+      >
         <Spinner />
+        <span className="sr-only">検索中...</span>
       </div>
     );
   }
@@ -54,8 +63,12 @@ export function SearchResults() {
   // 検索結果がない場合
   if (repos.length === 0) {
     return (
-      <div className="text-center text-gray-500 mt-8">
-        リポジトリが見つかりませんでした。
+      <div
+        className="text-center text-muted-foreground mt-8"
+        role="status"
+        aria-live="polite"
+      >
+        <p>「{query}」に一致するリポジトリが見つかりませんでした。</p>
       </div>
     );
   }
@@ -63,13 +76,21 @@ export function SearchResults() {
   // 検索結果の表示
   return (
     <div>
-      <p className="text-sm text-muted-foreground mt-4 mb-4">
-        検索結果: {totalCount}件
+      <p
+        className="text-sm text-muted-foreground mt-4 mb-4"
+        role="status"
+        aria-live="polite"
+      >
+        検索結果: {totalCount.toLocaleString()}件
       </p>
 
       {totalCount > 1000 && (
-        <p className="text-sm text-muted-foreground mt-4 mb-4">
-          検索結果が多数あります。APIの仕様により、最初の1000件のみ表示しています。
+        <p
+          className="text-sm text-muted-foreground mt-4 mb-4"
+          role="alert"
+          aria-live="polite"
+        >
+          検索結果が多数あります。APIの仕様により、最初の1,000件のみ表示しています。
         </p>
       )}
 

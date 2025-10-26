@@ -9,14 +9,26 @@ jest.mock("@/components/features/search/use-search-results");
 // Next.jsのImageとLinkをモック
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: { src: string; alt: string; width: number; height: number; className: string }) => {
+  default: (props: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    className: string;
+  }) => {
     return <img {...props} />;
   },
 }));
 
 jest.mock("next/link", () => ({
   __esModule: true,
-  default: ({ children, href }: { children: React.ReactNode; href: string }) => {
+  default: ({
+    children,
+    href,
+  }: {
+    children: React.ReactNode;
+    href: string;
+  }) => {
     return <a href={href}>{children}</a>;
   },
 }));
@@ -116,7 +128,7 @@ describe("SearchResults", () => {
     render(<SearchResults />);
 
     expect(
-      screen.getByText("リポジトリが見つかりませんでした。")
+      screen.getByText(/に一致するリポジトリが見つかりませんでした。/)
     ).toBeInTheDocument();
   });
 
@@ -153,7 +165,9 @@ describe("SearchResults", () => {
     render(<SearchResults />);
 
     expect(
-      screen.getByText(/検索結果が多数あります。APIの仕様により、最初の1000件のみ表示しています。/)
+      screen.getByText(
+        /検索結果が多数あります。APIの仕様により、最初の1,000件のみ表示しています。/
+      )
     ).toBeInTheDocument();
   });
 
