@@ -16,6 +16,12 @@ type RawGitHubSearchRepoResult =
   RestEndpointMethodTypes["search"]["repos"]["response"]["data"];
 
 /**
+ * GitHub API の検索結果アイテム型（内部使用）
+ * @internal
+ */
+type RawGitHubSearchRepoItem = RawGitHubSearchRepoResult["items"][number];
+
+/**
  * アプリケーションで使用するリポジトリオーナー情報
  */
 export type RepoOwner = {
@@ -89,6 +95,34 @@ export function toGitHubRepo(raw: RawGitHubRepo): GitHubRepo {
 }
 
 /**
+ * 検索アイテムをリポジトリ型に変換するヘルパー
+ * @param item - 検索結果のアイテム
+ * @returns アプリケーション用のリポジトリ型
+ */
+function searchItemToRepo(item: RawGitHubSearchRepoItem): GitHubRepo {
+  return {
+    id: item.id,
+    name: item.name,
+    full_name: item.full_name,
+    description: item.description,
+    owner: {
+      login: item.owner?.login ?? "",
+      avatar_url: item.owner?.avatar_url ?? "",
+      html_url: item.owner?.html_url,
+    },
+    html_url: item.html_url,
+    stargazers_count: item.stargazers_count ?? 0,
+    watchers_count: item.watchers_count ?? 0,
+    forks_count: item.forks_count ?? 0,
+    open_issues_count: item.open_issues_count ?? 0,
+    language: item.language,
+    created_at: item.created_at,
+    updated_at: item.updated_at,
+    pushed_at: item.pushed_at,
+  };
+}
+
+/**
  * 型アサーションヘルパー: 生の検索結果からアプリケーション型へ変換
  * @param raw - GitHub APIの生の検索結果
  * @returns アプリケーション用の型付き検索結果
@@ -99,9 +133,7 @@ export function toGitHubSearchRepoResult(
   return {
     total_count: raw.total_count,
     incomplete_results: raw.incomplete_results,
-    items: raw.items.map((item) =>
-      toGitHubRepo(item as unknown as RawGitHubRepo)
-    ),
+    items: raw.items.map(searchItemToRepo),
   };
 }
 

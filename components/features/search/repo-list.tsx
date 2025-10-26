@@ -5,16 +5,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { GitHubSearchRepos } from "@/lib/types";
 
 /**
+ * リポジトリリストコンポーネントのプロパティ
+ */
+type RepoListProps = {
+  /** 検索結果のリポジトリリスト */
+  repos: GitHubSearchRepos;
+};
+
+/**
  * リポジトリ検索結果を表示するコンポーネント
  * グリッドレイアウトで複数のリポジトリカードを表示
- *
- * @param repos - 検索結果のリポジトリリスト
  */
-export const RepoList = memo(function RepoList({
-  repos,
-}: {
-  repos: GitHubSearchRepos;
-}) {
+export const RepoList = memo(function RepoList({ repos }: RepoListProps) {
   return (
     // biome-ignore lint/a11y/useSemanticElements: role="list" is intentionally used for grid layout with semantic list behavior
     <div

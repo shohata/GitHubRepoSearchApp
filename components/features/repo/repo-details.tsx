@@ -5,8 +5,19 @@ import { getRepo } from "@/lib/github";
 import type { RepoParams } from "@/lib/validations";
 import { RepoStatCard } from "./repo-stat-card";
 
-// リポジトリ詳細コンポーネント
-export async function RepoDetails({ params }: { params: Promise<RepoParams> }) {
+/**
+ * リポジトリ詳細コンポーネントのプロパティ
+ */
+type RepoDetailsProps = {
+  /** リポジトリのパラメータ（owner, repo） */
+  params: Promise<RepoParams>;
+};
+
+/**
+ * リポジトリ詳細コンポーネント
+ * リポジトリの詳細情報と統計を表示
+ */
+export async function RepoDetails({ params }: RepoDetailsProps) {
   const { owner, repo } = await params;
   const repoDetails = await getRepo(owner, repo);
 

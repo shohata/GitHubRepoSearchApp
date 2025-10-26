@@ -52,5 +52,36 @@ describe("lib/pagination.ts", () => {
       const result = generatePagination(3, 4, 3);
       expect(result).toEqual(paginationExpectations.totalPages4Current3Max3);
     });
+
+    // エッジケーステスト
+    it("現在ページが総ページ数を超える場合でもエラーにならない", () => {
+      const result = generatePagination(15, 10, 5);
+      expect(result).toBeDefined();
+      expect(Array.isArray(result)).toBe(true);
+      // 最後のページが含まれていることを確認
+      const lastPage = result.find(
+        (item) => item.type === "page" && item.pageNumber === 10
+      );
+      expect(lastPage).toBeDefined();
+    });
+
+    it("現在ページが0以下の場合でもエラーにならない", () => {
+      const result = generatePagination(0, 10, 5);
+      expect(result).toBeDefined();
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it("総ページ数が負の値の場合は空配列を返す", () => {
+      const result = generatePagination(1, -1, 5);
+      expect(result).toEqual([]);
+    });
+
+    it("maxVisiblePagesが1の場合でも正しく動作する", () => {
+      const result = generatePagination(5, 10, 1);
+      expect(result).toBeDefined();
+      expect(Array.isArray(result)).toBe(true);
+      // 少なくとも現在ページと最初・最後のページが含まれる
+      expect(result.length).toBeGreaterThan(0);
+    });
   });
 });

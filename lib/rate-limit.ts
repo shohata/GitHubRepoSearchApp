@@ -29,6 +29,7 @@ export class RateLimiter {
   private tokenCache: Map<string, TokenData>;
   private interval: number;
   private limit: number;
+  private cleanupTimer?: NodeJS.Timeout;
 
   constructor(options: RateLimitOptions = {}) {
     this.tokenCache = new Map();
@@ -36,7 +37,7 @@ export class RateLimiter {
     this.limit = options.uniqueTokenPerInterval || 10; // デフォルト: 10リクエスト/分
 
     // 定期的に古いエントリをクリーンアップ
-    setInterval(() => this.cleanup(), this.interval);
+    this.cleanupTimer = setInterval(() => this.cleanup(), this.interval);
   }
 
   /**
@@ -103,6 +104,18 @@ export class RateLimiter {
       remaining: Math.max(0, this.limit - tokenData.count),
       reset: tokenData.resetTime,
     };
+  }
+
+  /**
+   * リソースをクリーンアップし、タイマーを停止
+   * メモリリークを防ぐため、インスタンスが不要になった際に呼び出す
+   */
+  destroy(): void {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer);
+      this.cleanupTimer = undefined;
+    }
+    this.tokenCache.clear();
   }
 }
 

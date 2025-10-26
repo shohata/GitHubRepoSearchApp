@@ -84,13 +84,16 @@ export async function GET(request: Request) {
   } catch (error) {
     // Zodバリデーションエラー
     if (error instanceof ZodError) {
-      const issues = error.issues;
-      const firstIssue = issues[0];
+      const errorMessages = error.issues.map((issue) => issue.message);
       return NextResponse.json(
         {
           error: "Validation Error",
-          message: firstIssue?.message || "Invalid request parameters",
-          field: firstIssue?.path.join("."),
+          message: errorMessages.join(", "),
+          details: error.issues.map((issue) => ({
+            path: issue.path.join("."),
+            message: issue.message,
+            code: issue.code,
+          })),
         },
         { status: 400 }
       );
