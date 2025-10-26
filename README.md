@@ -62,48 +62,38 @@ This will significantly relax the API rate limit, allowing you to send more requ
 
 ## Testing
 
-This project uses Cypress for End-to-End (E2E) testing.
+This project uses Jest, Testing Library, and Playwright for comprehensive testing.
 
-1. **Open Cypress in Interactive Mode:** This allows you to see the tests run in a browser, which is useful during development.
+### Unit Tests (Jest)
 
-   ```bash
-   pnpm cy:open
-   ```
+```bash
+# Run all unit tests
+pnpm test
 
-2. **Run Cypress in Headless Mode:** This runs all tests in the command line. It's ideal for CI/CD environments.
+# Run tests in watch mode
+pnpm test:watch
 
-   ```bash
-   pnpm cy:run
-   ```
+# Generate coverage report
+pnpm test:coverage
+```
 
-## 工夫した点・こだわったポイント
+### E2E Tests (Playwright)
 
-### アーキテクチャ
+```bash
+# Run all E2E tests
+pnpm test:e2e
 
-- **API Routeの活用 (BFF)**: クライアントから直接 GitHub API を呼び出すのではなく、Next.js の API ルートを経由しています。これにより、API の認証トークンをサーバーサイドで安全に管理し、クライアントに公開することなく API リクエストを行えます。
+# Run E2E tests in UI mode
+pnpm test:e2e:ui
 
-### UI/UX
+# Run E2E tests in debug mode
+pnpm test:e2e:debug
+```
 
-- **モダンな UI デザイン**: UI コンポーネントライブラリ `shadcn/ui` と `Tailwind CSS` を全面的に採用し、再利用性が高く、モダンで見やすいデザインを効率的に構築しました。
-- **テーマ切り替え機能**: `next-themes` を利用して、ライトモードとダークモードの切り替え機能を実装。ユーザーのシステム設定に合わせることも可能です。
-- **きめ細かな状態表示**: 検索中のスピナー表示や、エラー発生時の専用画面など、ユーザーがアプリケーションの状態を直感的に把握できるよう配慮しました。
-- **洗練されたページネーション**: 検索結果が多い場合でも、現在のページをハイライトし、ページ番号を省略表示するなど、快適にブラウジングできる UI を実装しました。
+For more details, see [CLAUDE.md](CLAUDE.md) and [README.test.md](README.test.md).
 
-### パフォーマンスと SEO
+## Documentation
 
-- **サーバーコンポーネントによる高速表示**: リポジトリ詳細ページでは、Next.js のサーバーコンポーネントを採用。サーバー側でデータ取得とレンダリングを行うことで、ページの初期表示速度を向上させています。
-- **動的なメタデータ生成**: 詳細ページでは、 `generateMetadata` 関数を用いてリポジトリ情報をページのメタデータ（タイトルや OGP タグ）に動的に設定。これにより SEO を向上させ、SNS での共有時にも適切な情報が表示されるようにしています。
-- **SWR による効率的なデータ取得**: 検索結果の表示には `SWR` を採用し、キャッシュ活用による高速な表示や、画面フォーカス時の自動データ更新など、ユーザー体験を高める工夫を凝らしています。
-
-### 開発体験と品質
-
-- **カスタムフックによるロジックの分離**: 検索フォームや検索結果に関するロジックをカスタムフックに切り出すことで、UI とロジックを分離。これにより、コードの可読性、再利用性、テストのしやすさを向上させています。
-- **詳細なエラーハンドリング**: GitHub API との通信部分では、API の利用回数制限やリポジトリが見つからない場合など、HTTP ステータスコードに応じて具体的なエラーメッセージを生成し、ユーザーに分かりやすく伝わるようにしています。
-- **Cypress による E2E テスト**: ユーザーの一連の操作を自動でテストする E2E テストを実装。アプリケーション全体の品質を担保し、将来の機能追加や修正時にも安心して開発を進められる体制を整えています。
-
-## AI 利用方法
-
-本アプリケーションの開発には Gemini の Canvas を利用しました。
-
-- **デバッグ**: エラーやバグが発生した場合、ある程度考えてもわからなかった時に、問題の解決を依頼するために AI を活用。問題解決後のコードを部分的に生成してもらい、手を加えながら実装しました。
-- **コードレビュー**: プロダクトレベルのアプリケーションを作成するため、高度な知識を持つレビュワーとして AI を活用。コードレビューを元に取捨選択しながらコードを改善していきました。
+- [DESIGN.md](DESIGN.md) - Design philosophy and key features
+- [CLAUDE.md](CLAUDE.md) - Development guide for Claude Code
+- [README.test.md](README.test.md) - Testing documentation
