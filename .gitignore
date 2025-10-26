@@ -50,3 +50,6 @@ next-env.d.ts
 
 # Ignore Adobe SWC files
 /.swc/
+
+*storybook.log
+storybook-static
