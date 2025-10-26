@@ -23,5 +23,12 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "playwright-report", "test-results"]
+  "exclude": [
+    "node_modules",
+    "playwright-report",
+    "test-results",
+    "**/*.stories.tsx",
+    "**/*.stories.ts",
+    ".storybook"
+  ]
 }
