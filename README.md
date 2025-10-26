@@ -84,6 +84,9 @@ pnpm test:coverage
 # Run all E2E tests
 pnpm test:e2e
 
+# Run E2E tests in CLI mode
+pnpm test:e2e:ui
+
 # Run E2E tests in UI mode
 pnpm test:e2e:ui
 

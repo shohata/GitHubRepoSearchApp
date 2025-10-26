@@ -90,6 +90,9 @@ pnpm test:coverage
 # 全てのE2Eテストを実行
 pnpm test:e2e
 
+# CLIモードでE2Eテストを実行
+pnpm test:e2e:cli
+
 # UIモードでE2Eテストを実行
 pnpm test:e2e:ui
 
@@ -143,7 +146,7 @@ pnpm exec playwright install
 1. **機能開発**: 新機能を実装
 2. **ユニットテスト作成**: `__tests__/`にテストを追加
 3. **E2Eテスト作成**: `e2e/`にテストを追加（必要に応じて）
-4. **テスト実行**: `pnpm test`と`pnpm test:e2e`で確認
+4. **テスト実行**: `pnpm test`と`pnpm test:e2e:cli`で確認
 5. **品質チェック（必須）**:
    - `pnpm format` でコードフォーマット
    - `pnpm lint` でコード品質を確認
