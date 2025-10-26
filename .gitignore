@@ -10,6 +10,10 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # next.js
 /.next/
@@ -37,14 +41,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# Cypress generated files
-cypress/videos/
-cypress/screenshots/
-cypress/downloads/
-
-# Cypress environment variables (if used)
-cypress.env.json
 
 # Ignore Adobe SWC files
 /.swc/
