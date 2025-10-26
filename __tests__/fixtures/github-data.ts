@@ -3,7 +3,7 @@ import type { GitHubRepo, GitHubSearchRepos } from "@/lib/types";
 /**
  * テスト用のモックリポジトリデータ（React）
  */
-const mockReactRepo: GitHubRepo = {
+export const mockReactRepo: GitHubRepo = {
   id: 10270250,
   full_name: "facebook/react",
   name: "react",
@@ -27,7 +27,7 @@ const mockReactRepo: GitHubRepo = {
 /**
  * テスト用のモックリポジトリデータ（Vue）
  */
-const mockVueRepo: GitHubRepo = {
+export const mockVueRepo: GitHubRepo = {
   id: 11730342,
   full_name: "vuejs/vue",
   name: "vue",
@@ -58,35 +58,11 @@ export const mockMultipleRepos: GitHubSearchRepos = [
 
 /**
  * GitHub Search API のレスポンス形式（複数リポジトリ）
+ * 既存のmockReactRepoとmockVueRepoを再利用
  */
 export const mockSearchResult = {
   total_count: 2,
-  items: [
-    {
-      id: mockReactRepo.id,
-      full_name: mockReactRepo.full_name,
-      name: mockReactRepo.name,
-      owner: mockReactRepo.owner,
-      description: mockReactRepo.description,
-      stargazers_count: mockReactRepo.stargazers_count,
-      language: mockReactRepo.language,
-      forks_count: mockReactRepo.forks_count,
-      open_issues_count: mockReactRepo.open_issues_count,
-      watchers_count: mockReactRepo.watchers_count,
-    },
-    {
-      id: mockVueRepo.id,
-      full_name: mockVueRepo.full_name,
-      name: mockVueRepo.name,
-      owner: mockVueRepo.owner,
-      description: mockVueRepo.description,
-      stargazers_count: mockVueRepo.stargazers_count,
-      language: mockVueRepo.language,
-      forks_count: mockVueRepo.forks_count,
-      open_issues_count: mockVueRepo.open_issues_count,
-      watchers_count: mockVueRepo.watchers_count,
-    },
-  ],
+  items: [mockReactRepo, mockVueRepo],
   incomplete_results: false,
 };
 
@@ -94,12 +70,6 @@ export const mockSearchResult = {
  * GitHub Repos API のレスポンス形式（リポジトリ詳細）
  */
 export const mockRepoDetails = mockReactRepo;
-
-/**
- * 個別のリポジトリをエクスポート（テストで個別に使用する場合）
- */
-export const mockReactRepo_exported = mockReactRepo;
-export const mockVueRepo_exported = mockVueRepo;
 
 /**
  * useSearchResults テスト用の簡易APIレスポンスモック
