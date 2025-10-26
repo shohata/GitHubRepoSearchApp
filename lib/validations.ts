@@ -8,11 +8,15 @@ export const searchParamsSchema = z.object({
     .string()
     .min(1, "検索クエリは必須です")
     .max(256, "検索クエリは256文字以内で入力してください")
-    .transform((val) => val.trim().replace(/[<>]/g, "")),
+    .transform((val) => val.trim().replace(/[<>]/g, ""))
+    .pipe(z.string().min(1, "検索クエリは必須です")),
   page: z
     .string()
     .optional()
     .default("1")
+    .refine((val) => /^\d+$/.test(val), {
+      message: "ページ番号は正の整数である必要があります",
+    })
     .transform((val) => Number.parseInt(val, 10))
     .pipe(z.number().int().positive().max(100)),
 });
