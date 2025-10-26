@@ -104,50 +104,10 @@ export const mockVueRepo_exported = mockVueRepo;
 /**
  * useSearchResults テスト用の簡易APIレスポンスモック
  * 使用例: __tests__/components/use-search-results.test.ts
+ * 既存のmockReactRepoとmockVueRepoを再利用
  */
 export const mockSimpleSearchResponse = {
-  items: [
-    {
-      id: 1,
-      name: "repo1",
-      full_name: "user1/repo1",
-      owner: {
-        login: "user1",
-        avatar_url: "https://example.com/user1.png",
-        html_url: "https://github.com/user1",
-      },
-      description: "Test repository 1",
-      stargazers_count: 100,
-      language: "JavaScript",
-      forks_count: 10,
-      open_issues_count: 5,
-      watchers_count: 50,
-      html_url: "https://github.com/user1/repo1",
-      created_at: "2020-01-01T00:00:00Z",
-      updated_at: "2024-01-01T00:00:00Z",
-      pushed_at: "2024-01-01T00:00:00Z",
-    },
-    {
-      id: 2,
-      name: "repo2",
-      full_name: "user2/repo2",
-      owner: {
-        login: "user2",
-        avatar_url: "https://example.com/user2.png",
-        html_url: "https://github.com/user2",
-      },
-      description: "Test repository 2",
-      stargazers_count: 200,
-      language: "TypeScript",
-      forks_count: 20,
-      open_issues_count: 10,
-      watchers_count: 100,
-      html_url: "https://github.com/user2/repo2",
-      created_at: "2020-06-01T00:00:00Z",
-      updated_at: "2024-01-01T00:00:00Z",
-      pushed_at: "2024-01-01T00:00:00Z",
-    },
-  ],
+  items: [mockReactRepo, mockVueRepo],
   total_count: 100,
   incomplete_results: false,
 };
